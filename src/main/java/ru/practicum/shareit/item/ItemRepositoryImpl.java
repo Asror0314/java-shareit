@@ -15,7 +15,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public Optional<Item> findItemById(long itemId) {
-        if(!items.containsKey(itemId)) {
+        if (!items.containsKey(itemId)) {
             throw new NotFoundException(String.format("Item id = '%d' not found", itemId));
         }
 

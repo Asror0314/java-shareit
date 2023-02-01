@@ -38,10 +38,10 @@ public class UserServiceImpl implements UserService {
         isEmailExist(newUser);
 
         newUser.setId(userId);
-        if(newUser.getName() == null) {
+        if (newUser.getName() == null) {
             newUser.setName(user.getName());
         }
-        if(newUser.getEmail() == null) {
+        if (newUser.getEmail() == null) {
             newUser.setEmail(user.getEmail());
         }
         return userRepository.updateUser(newUser).get();
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
                 .map(User::getEmail)
                 .anyMatch(
                         users -> users.equals(user.getEmail()));
-        if(isExist) {
+        if (isExist) {
             throw new AlreadyExistsException(String.format("User email = '%s' already exists", user.getEmail()));
         }
     }

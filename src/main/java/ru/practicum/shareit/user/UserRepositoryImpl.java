@@ -18,7 +18,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> findUserById(final Long userId) {
-       if(!users.containsKey(userId)) {
+       if (!users.containsKey(userId)) {
            throw new NotFoundException(String.format("User id = '%d' not found", userId));
        }
 

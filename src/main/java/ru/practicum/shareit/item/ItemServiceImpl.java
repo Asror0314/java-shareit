@@ -53,18 +53,18 @@ public class ItemServiceImpl implements ItemService {
         final User user = userRepository.findUserById(userId).get();
         final Item item = itemRepository.findItemById(itemId).get();
 
-        if(!item.getOwner().getId().equals(userId)) {
+        if (!item.getOwner().getId().equals(userId)) {
             throw new NotFoundException(String.format("User id = '%d' not match", itemId));
         }
 
         newItemDto.setId(itemId);
-        if(newItemDto.getStringAvailable() == null) {
+        if (newItemDto.getStringAvailable() == null) {
             newItemDto.setAvailable(String.valueOf(item.isAvailable()));
         }
-        if(newItemDto.getName() == null) {
+        if (newItemDto.getName() == null) {
             newItemDto.setName(item.getName());
         }
-        if(newItemDto.getDescription() == null) {
+        if (newItemDto.getDescription() == null) {
             newItemDto.setDescription(item.getDescription());
         }
 
@@ -75,7 +75,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> searchItemByText(String text) {
-        if(text.isBlank()) {
+        if (text.isBlank()) {
             return List.of();
         }
         return itemRepository.searchItemByText(text)
