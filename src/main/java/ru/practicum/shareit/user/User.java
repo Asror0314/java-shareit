@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * TODO Sprint add-controllers.
@@ -23,5 +24,6 @@ public class User {
 
     @NotBlank
     @Email
+    @NotNull
     private String email;
 }
