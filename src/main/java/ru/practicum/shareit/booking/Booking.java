@@ -8,9 +8,6 @@ import lombok.NoArgsConstructor;
  * TODO Sprint add-bookings.
  */
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Booking {
 
 
