@@ -3,6 +3,7 @@ package ru.practicum.shareit.item;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 @Slf4j
 public class ItemServiceImpl implements ItemService {
 
@@ -37,12 +39,13 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemDto> getAllItems(long userId) {
         return itemRepository.findAll()
                 .stream()
-                .filter(item -> item.getOwnerId() == userId )
+                .filter(item -> item.getOwner().getId() == userId )
                 .map(ItemMapper::item2ItemDto)
                 .collect(Collectors.toList());
     }
 
     @Override
+    @Transactional
     public ItemDto addNewItem(ItemDto itemDto, long userId) {
         final User user = userRepository.findById(userId).get();
         final Item item = ItemMapper.itemDto2Item(itemDto, user);
@@ -52,11 +55,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public ItemDto updateItem(ItemDto newItemDto, long itemId, long userId) {
         final User user = userRepository.findById(userId).get();
         final Item item = itemRepository.findById(itemId).get();
 
-        if (!item.getOwnerId().equals(userId)) {
+        if (!item.getOwner().getId().equals(userId)) {
             throw new NotFoundException(String.format("User id = '%d' not match", itemId));
         }
 
@@ -79,6 +83,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public List<ItemDto> searchItemByText(String text) {
         if (text.isBlank()) {
             return List.of();

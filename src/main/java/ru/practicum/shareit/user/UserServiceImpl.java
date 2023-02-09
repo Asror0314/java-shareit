@@ -9,7 +9,7 @@ import ru.practicum.shareit.exception.AlreadyExistsException;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -36,6 +36,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User updateUser(User newUser, Long userId) {
         final User user = userRepository.findById(userId).get();
 
@@ -50,19 +51,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);
     }
 
-    private void isEmailExist(User user) {
-        boolean isExist = userRepository.findAll()
-                .stream()
-                .map(User::getEmail)
-                .anyMatch(
-                        users -> users.equals(user.getEmail()));
-        if (isExist) {
-            throw new AlreadyExistsException(String.format("User email = '%s' already exists", user.getEmail()));
-        }
-    }
+//    private void isEmailExist(User user) {
+//        boolean isExist = userRepository.findAll()
+//                .stream()
+//                .map(User::getEmail)
+//                .anyMatch(
+//                        users -> users.equals(user.getEmail()));
+//        if (isExist) {
+//            throw new AlreadyExistsException(String.format("User email = '%s' already exists", user.getEmail()));
+//        }
+//    }
 
 }

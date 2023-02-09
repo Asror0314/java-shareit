@@ -32,6 +32,7 @@ public class Item {
     @Type(type="boolean")
     private boolean available;
 
-    @Column(name = "owner_id")
-    private Long ownerId;
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
 }
