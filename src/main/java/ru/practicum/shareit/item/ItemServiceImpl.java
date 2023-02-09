@@ -8,6 +8,7 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +27,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto getItemById(long itemId) {
-        final Item item = itemRepository.findItemById(itemId).get();
+        final Item item = itemRepository.findById(itemId).get();
         final ItemDto itemDto = ItemMapper.item2ItemDto(item);
 
         return itemDto;
@@ -34,26 +35,28 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> getAllItems(long userId) {
-        return itemRepository.findAllItems(userId)
+        return itemRepository.findAll()
                 .stream()
-                .map(item -> ItemMapper.item2ItemDto(item))
+                .filter(item -> item.getOwnerId() == userId )
+                .map(ItemMapper::item2ItemDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public ItemDto addNewItem(ItemDto itemDto, long userId) {
-        final User user = userRepository.findUserById(userId).get();
+        final User user = userRepository.findById(userId).get();
         final Item item = ItemMapper.itemDto2Item(itemDto, user);
-        final Item newItem = itemRepository.addNewItem(item).get();
+        final Item newItem = itemRepository.save(item);
+
         return ItemMapper.item2ItemDto(newItem);
     }
 
     @Override
     public ItemDto updateItem(ItemDto newItemDto, long itemId, long userId) {
-        final User user = userRepository.findUserById(userId).get();
-        final Item item = itemRepository.findItemById(itemId).get();
+        final User user = userRepository.findById(userId).get();
+        final Item item = itemRepository.findById(itemId).get();
 
-        if (!item.getOwner().getId().equals(userId)) {
+        if (!item.getOwnerId().equals(userId)) {
             throw new NotFoundException(String.format("User id = '%d' not match", itemId));
         }
 
@@ -69,7 +72,9 @@ public class ItemServiceImpl implements ItemService {
         }
 
         final Item newItem = ItemMapper.itemDto2Item(newItemDto, user);
-        final Item updatedItem = itemRepository.updateItem(newItem).get();
+        newItem.setId(itemId);
+
+        final Item updatedItem = itemRepository.save(newItem);
         return ItemMapper.item2ItemDto(updatedItem);
     }
 
@@ -78,9 +83,8 @@ public class ItemServiceImpl implements ItemService {
         if (text.isBlank()) {
             return List.of();
         }
-        return itemRepository.searchItemByText(text)
-                .stream()
-                .map(item -> ItemMapper.item2ItemDto(item))
-                .collect(Collectors.toList());
+        final List<Item> itemList = itemRepository.searchItemByText(text.toLowerCase());
+
+        return ItemMapper.item2ItemDtoList(itemList);
     }
 }

@@ -8,12 +8,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
-public class ItemRepositoryImpl implements ItemRepository {
+public class ItemRepositoryImpl {
 
     private final Map<Long, Item> items = new HashMap<>();
     private long generatedId = 0;
 
-    @Override
     public Optional<Item> findItemById(long itemId) {
         if (!items.containsKey(itemId)) {
             throw new NotFoundException(String.format("Item id = '%d' not found", itemId));
@@ -23,16 +22,14 @@ public class ItemRepositoryImpl implements ItemRepository {
         return Optional.of(item);
     }
 
-    @Override
     public List<Item> findAllItems(long userId) {
         return items.values()
                 .stream()
                 .filter(
-                        item -> item.getOwner().getId().equals(userId))
+                        item -> item.getOwnerId().equals(userId))
                 .collect(Collectors.toList());
     }
 
-    @Override
     public Optional<Item> addNewItem(Item item) {
         item.setId(getGeneratedId());
         items.put(item.getId(), item);
@@ -40,13 +37,11 @@ public class ItemRepositoryImpl implements ItemRepository {
         return Optional.of(item);
     }
 
-    @Override
     public Optional<Item> updateItem(Item newItem) {
         items.put(newItem.getId(), newItem);
         return Optional.of(newItem);
     }
 
-    @Override
     public List<Item> searchItemByText(String text) {
         return items.values()
                 .stream()
