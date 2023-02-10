@@ -1,5 +1,6 @@
-drop table if exists ITEM;
-drop table if exists USERS;
+drop table if exists booking;
+-- drop table if exists ITEM;
+-- drop table if exists USERS;
 
 CREATE TABLE IF NOT EXISTS PUBLIC.users (
     id BIGINT AUTO_INCREMENT,
@@ -14,8 +15,20 @@ CREATE TABLE IF NOT EXISTS PUBLIC.item (
     itemname CHARACTER VARYING(100) NOT NULL,
     description CHARACTER VARYING(200) NOT NULL,
     available bit,
-    owner_id INTEGER NOT NULL,
+    owner_id BIGINT NOT NULL,
     CONSTRAINT ITEM_PK PRIMARY KEY (id),
     CONSTRAINT ITEM_FK FOREIGN KEY (owner_id) REFERENCES PUBLIC.users(id)
+);
+
+CREATE TABLE IF NOT EXISTS PUBLIC.booking (
+    id BIGINT AUTO_INCREMENT,
+    start_booking TIMESTAMP WITHOUT TIME ZONE,
+    end_booking TIMESTAMP WITHOUT TIME ZONE,
+    status CHARACTER VARYING(10) NOT NULL,
+    booker_id BIGINT NOT NULL,
+    item_id BIGINT NOT NULL,
+    CONSTRAINT BOOKING_PK PRIMARY KEY (id),
+    CONSTRAINT BOOKING_FK FOREIGN KEY (booker_id) REFERENCES PUBLIC.users(id),
+    CONSTRAINT BOOKING_FK2 FOREIGN KEY (item_id) REFERENCES PUBLIC.item(id)
 );
 

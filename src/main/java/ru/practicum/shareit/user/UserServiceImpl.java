@@ -5,6 +5,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.AlreadyExistsException;
+import ru.practicum.shareit.exception.NotFoundException;
 
 import java.util.List;
 
@@ -26,7 +27,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(Long userId) {
-        return userRepository.findById(userId).get();
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(String.format("User id = %d not found", userId)));
     }
 
     @Override
@@ -38,7 +40,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User updateUser(User newUser, Long userId) {
-        final User user = userRepository.findById(userId).get();
+        final User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(String.format("User id = %d not found", userId)));
 
         newUser.setId(userId);
         if (newUser.getName() == null) {

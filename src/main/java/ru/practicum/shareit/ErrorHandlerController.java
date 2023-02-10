@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.practicum.shareit.exception.AlreadyExistsException;
+import ru.practicum.shareit.exception.DateTimeException;
 import ru.practicum.shareit.exception.NotFoundException;
 
 import javax.validation.ValidationException;
@@ -19,31 +20,37 @@ public class ErrorHandlerController {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleNotFound(final NotFoundException e) {
+    public ErrorResponse handleNotFound(NotFoundException e) {
         return new ErrorResponse(String.format("%s", e.getMessage()));
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleNoSuchElement(final NoSuchElementException e) {
+    public ErrorResponse handleNoSuchElement(NoSuchElementException e) {
         return new ErrorResponse(String.format("%s", e.getMessage()));
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleAlreadyExists(final AlreadyExistsException e) {
+    public ErrorResponse handleAlreadyExists(AlreadyExistsException e) {
         return new ErrorResponse(String.format("%s", e.getMessage()));
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleDataIntegrityViolation(final DataIntegrityViolationException e) {
+    public ErrorResponse handleDataIntegrityViolation(DataIntegrityViolationException e) {
         return new ErrorResponse(String.format("%s", e.getMessage()));
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleValidation(final ValidationException e) {
+    public ErrorResponse handleDateTime(DateTimeException e) {
+        return new ErrorResponse(String.format("%s", e.getMessage()));
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleValidation(ValidationException e) {
         return new ErrorResponse(String.format("%s", e.getMessage()));
     }
 

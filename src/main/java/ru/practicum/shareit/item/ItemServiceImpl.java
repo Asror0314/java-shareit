@@ -29,7 +29,8 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto getItemById(long itemId) {
-        final Item item = itemRepository.findById(itemId).get();
+        final Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new NotFoundException(String.format("Item id = %d not found", itemId)));
         final ItemDto itemDto = ItemMapper.item2ItemDto(item);
 
         return itemDto;
@@ -47,7 +48,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public ItemDto addNewItem(ItemDto itemDto, long userId) {
-        final User user = userRepository.findById(userId).get();
+        final User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(String.format("User id = %d not found", userId)));
         final Item item = ItemMapper.itemDto2Item(itemDto, user);
         final Item newItem = itemRepository.save(item);
 
@@ -57,8 +59,10 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public ItemDto updateItem(ItemDto newItemDto, long itemId, long userId) {
-        final User user = userRepository.findById(userId).get();
-        final Item item = itemRepository.findById(itemId).get();
+        final User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(String.format("User id = %d not found", userId)));
+        final Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new NotFoundException(String.format("Item id = %d not found", itemId)));
 
         if (!item.getOwner().getId().equals(userId)) {
             throw new NotFoundException(String.format("User id = '%d' not match", itemId));
