@@ -2,8 +2,8 @@ package ru.practicum.shareit.booking;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
-import ru.practicum.shareit.booking.dto.BookingResponceDto;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -23,7 +23,7 @@ public class BookingController {
     }
 
     @GetMapping
-    public List<BookingResponceDto> getAllBooking(
+    public List<BookingDto> getAllBooking(
             @RequestHeader(value = "X-Sharer-User-Id") long userId,
             @RequestParam(defaultValue = "ALL") String state
             ) {
@@ -31,7 +31,7 @@ public class BookingController {
     }
 
     @GetMapping("/owner")
-    public List<BookingResponceDto> getAllBookingForOwner(
+    public List<BookingDto> getAllBookingForOwner(
             @RequestHeader(value = "X-Sharer-User-Id") long userId,
             @RequestParam(defaultValue = "ALL") String state
             ) {
@@ -39,7 +39,7 @@ public class BookingController {
     }
 
     @GetMapping("/{bookingId}")
-    public BookingResponceDto getBookingById(
+    public BookingDto getBookingById(
             @PathVariable long bookingId,
             @RequestHeader(value = "X-Sharer-User-Id") long userId
     ) {
@@ -47,7 +47,7 @@ public class BookingController {
     }
 
     @PostMapping
-    public BookingResponceDto addNewBooking(
+    public BookingDto addNewBooking(
             @Valid @RequestBody BookingRequestDto booking,
             @RequestHeader(value = "X-Sharer-User-Id") long userId
     ) {
@@ -55,7 +55,7 @@ public class BookingController {
     }
 
     @PatchMapping("/{bookingId}")
-    public BookingResponceDto updateBookingStatus(
+    public BookingDto updateBookingStatus(
             @PathVariable long bookingId,
             @RequestParam(value = "approved") boolean status,
             @RequestHeader(value = "X-Sharer-User-Id") long userId

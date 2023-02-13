@@ -4,13 +4,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.Status;
+import ru.practicum.shareit.booking.Booking;
+import ru.practicum.shareit.booking.BookingRepository;
+import ru.practicum.shareit.exception.MismatchException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
 
+import javax.validation.ValidationException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,11 +28,20 @@ public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
+    private final BookingRepository bookingRepository;
+    private final CommentRepository commentRepository;
 
     @Autowired
-    public ItemServiceImpl(ItemRepository itemRepository, UserRepository userRepository) {
+    public ItemServiceImpl(
+            ItemRepository itemRepository,
+            UserRepository userRepository,
+            BookingRepository bookingRepository,
+            CommentRepository commentRepository
+    ) {
         this.itemRepository = itemRepository;
         this.userRepository = userRepository;
+        this.bookingRepository = bookingRepository;
+        this.commentRepository = commentRepository;
     }
 
     @Override
@@ -109,7 +125,20 @@ public class ItemServiceImpl implements ItemService {
         final Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException(String.format("Item id = %d not found", itemId)));
 
-        CommentMapper.map2Comment(commentDto, user, item);
-        return null;
+        Booking booking = bookingRepository
+                .findBookingByBooker_IdAndItem_IdAndStatusAndEndBefore(userId, itemId, Status.APPROVED, LocalDateTime.now())
+                .orElseThrow(() -> new ValidationException(
+                        String.format("User id = %d the user has not booked this item id = %d"
+                                , userId, itemId)));
+
+        System.out.println(booking.getId());
+        System.out.println(booking.getItem().getId());
+        System.out.println(booking.getBooker().getId());
+
+        final Comment comment = CommentMapper.map2Comment(commentDto, user, item);
+
+        commentRepository.save(comment);
+
+        return CommentMapper.map2CommentDto(comment);
     }
 }

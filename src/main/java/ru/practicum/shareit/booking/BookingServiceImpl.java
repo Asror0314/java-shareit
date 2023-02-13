@@ -3,9 +3,10 @@ package ru.practicum.shareit.booking;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.Status;
+import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
-import ru.practicum.shareit.booking.dto.BookingResponceDto;
 import ru.practicum.shareit.exception.DateTimeException;
 import ru.practicum.shareit.exception.MismatchException;
 import ru.practicum.shareit.exception.NotFoundException;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@Transactional(readOnly = true)
 public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;
@@ -35,7 +37,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingResponceDto> getAllBooking(long bookerId, String state) {
+    public List<BookingDto> getAllBooking(long bookerId, String state) {
         userRepository.findById(bookerId)
                 .orElseThrow(() -> new NotFoundException(String.format("User id = %d not found", bookerId)));
         if (state.equals("ALL")) {
@@ -77,7 +79,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingResponceDto> getAllBookingForOwner(long ownerId, String state) {
+    public List<BookingDto> getAllBookingForOwner(long ownerId, String state) {
         userRepository.findById(ownerId)
                 .orElseThrow(() -> new NotFoundException(String.format("User id = %d not found", ownerId)));
         if (state.equals("ALL")) {
@@ -119,7 +121,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingResponceDto getBookingById(long bookingId, long userId) {
+    public BookingDto getBookingById(long bookingId, long userId) {
         final Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException(String.format("Booking id = %d not found", bookingId)));
 
@@ -134,7 +136,8 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingResponceDto addNewBooking(BookingRequestDto bookingDto, long userId) {
+    @Transactional
+    public BookingDto addNewBooking(BookingRequestDto bookingDto, long userId) {
         bookingDto.setStatus(Status.WAITING);
 
         if (bookingDto.getEnd().isBefore(LocalDateTime.now())
@@ -164,7 +167,8 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingResponceDto updateBookingStatus(long bookingId, boolean status, long ownerId) {
+    @Transactional
+    public BookingDto updateBookingStatus(long bookingId, boolean status, long ownerId) {
         final Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException(String.format("Booking id = %d not found", bookingId)));
         userRepository.findById(ownerId)
