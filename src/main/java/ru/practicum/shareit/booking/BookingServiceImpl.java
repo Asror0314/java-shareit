@@ -62,8 +62,8 @@ public class BookingServiceImpl implements BookingService {
                     .map(BookingMapper::map2BookingDto)
                     .collect(Collectors.toList());
         } else if (state.equals("FUTURE")) {
-            return bookingRepository.
-                    findAllByBooker_IdAndStartAfterOrderByStartDesc(bookerId, LocalDateTime.now())
+            return bookingRepository
+                    .findAllByBooker_IdAndStartAfterOrderByStartDesc(bookerId, LocalDateTime.now())
                     .stream()
                     .map(BookingMapper::map2BookingDto)
                     .collect(Collectors.toList());
@@ -104,8 +104,8 @@ public class BookingServiceImpl implements BookingService {
                     .map(BookingMapper::map2BookingDto)
                     .collect(Collectors.toList());
         } else if (state.equals("FUTURE")) {
-            return bookingRepository.
-                    findAllByItem_Owner_IdAndStartAfterOrderByStartDesc(ownerId, LocalDateTime.now())
+            return bookingRepository
+                    .findAllByItem_Owner_IdAndStartAfterOrderByStartDesc(ownerId, LocalDateTime.now())
                     .stream()
                     .map(BookingMapper::map2BookingDto)
                     .collect(Collectors.toList());
@@ -128,7 +128,7 @@ public class BookingServiceImpl implements BookingService {
         final Long bookerId = booking.getBooker().getId();
         final Long ownerId = booking.getItem().getOwner().getId();
 
-        if(!bookerId.equals(userId) && !ownerId.equals(userId)) {
+        if (!bookerId.equals(userId) && !ownerId.equals(userId)) {
             throw new MismatchException(String.format("user id = %d mismatch", userId));
         }
 
@@ -178,11 +178,11 @@ public class BookingServiceImpl implements BookingService {
             throw new MismatchException(String.format("Item owner other user"));
         }
 
-        if(!booking.getStatus().equals(Status.WAITING)) {
+        if (!booking.getStatus().equals(Status.WAITING)) {
             throw new ValidationException(String.format("Booking status has already been changed"));
         }
 
-       if(status) {
+       if (status) {
            booking.setStatus(Status.APPROVED);
        } else {
            booking.setStatus(Status.REJECTED);

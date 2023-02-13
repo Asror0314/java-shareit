@@ -2,8 +2,6 @@ package ru.practicum.shareit.item.model;
 
 import lombok.*;
 import org.hibernate.annotations.Type;
-import org.hibernate.type.BooleanType;
-import org.hibernate.type.TrueFalseType;
 import ru.practicum.shareit.user.User;
 
 import javax.persistence.*;
@@ -29,7 +27,7 @@ public class Item {
     private String description;
 
     @Column(name = "available")
-    @Type(type="boolean")
+    @Type(type = "boolean")
     private boolean available;
 
     @ManyToOne

@@ -8,9 +8,7 @@ import ru.practicum.shareit.Status;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingMapper;
 import ru.practicum.shareit.booking.BookingRepository;
-import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingItemDto;
-import ru.practicum.shareit.exception.MismatchException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -21,8 +19,6 @@ import ru.practicum.shareit.user.UserRepository;
 
 import javax.validation.ValidationException;
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,13 +54,13 @@ public class ItemServiceImpl implements ItemService {
                 .findLastBookingByItem_Id(userId, itemId, LocalDateTime.now())
                 .stream()
                 .findFirst()
-                .map(BookingMapper::map2BookindItemDto)
+                .map(BookingMapper::map2BookingItemDto)
                 .orElse(null);
         final BookingItemDto nextBooking = bookingRepository
                 .findNextBookingByItem_Id(userId, itemId, LocalDateTime.now())
                 .stream()
                 .findFirst()
-                .map(BookingMapper::map2BookindItemDto)
+                .map(BookingMapper::map2BookingItemDto)
                 .orElse(null);
 
         List<CommentDto> comments = commentRepository.findCommentByItem_Id(itemId)
@@ -85,7 +81,7 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemDto> getAllItems(long userId) {
         return itemRepository.findAll()
                 .stream()
-                .filter(item -> item.getOwner().getId() == userId )
+                .filter(item -> item.getOwner().getId() == userId)
                 .map(item -> getItemById(item.getId(), userId))
                 .collect(Collectors.toList());
     }
@@ -156,8 +152,7 @@ public class ItemServiceImpl implements ItemService {
         Booking booking = bookingRepository
                 .findBookingByBooker_IdAndItem_IdAndStatusAndEndBefore(userId, itemId, Status.APPROVED, LocalDateTime.now())
                 .orElseThrow(() -> new ValidationException(
-                        String.format("User id = %d the user has not booked this item id = %d"
-                                , userId, itemId)));
+                        String.format("User id = %d the user has not booked this item id = %d", userId, itemId)));
 
         System.out.println(booking.getId());
         System.out.println(booking.getItem().getId());

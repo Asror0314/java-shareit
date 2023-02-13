@@ -4,7 +4,6 @@ package ru.practicum.shareit.booking;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.format.annotation.DateTimeFormat;
 import ru.practicum.shareit.Status;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;

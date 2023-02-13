@@ -35,11 +35,10 @@ public class BookingMapper {
         booking.setStatus(bookingDto.getStatus());
         booking.setBooker(user);
         booking.setItem(item);
-        
         return booking;
     }
 
-    public static BookingItemDto map2BookindItemDto(Booking booking) {
+    public static BookingItemDto map2BookingItemDto(Booking booking) {
         final BookingItemDto bookingItemDto = new BookingItemDto();
 
         bookingItemDto.setId(booking.getId());

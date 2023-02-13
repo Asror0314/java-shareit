@@ -3,7 +3,6 @@ package ru.practicum.shareit.item.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingItemDto;
 
 import javax.validation.constraints.NotBlank;
@@ -38,7 +37,6 @@ public class ItemDto {
     private BookingItemDto nextBooking;
 
     private List<CommentDto> comments;
-
 
     @Transient
     public String getStringAvailable() {
