@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ItemService {
 
-    ItemDto getItemById(long itemId);
+    ItemDto getItemById(long itemId, long userId);
 
     List<ItemDto> getAllItems(long userId);
 

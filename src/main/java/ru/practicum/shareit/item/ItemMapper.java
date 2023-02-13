@@ -10,7 +10,14 @@ import java.util.stream.Collectors;
 public class ItemMapper {
 
     public static ItemDto item2ItemDto(final Item item) {
-        return new ItemDto(item.getId(), item.getName(), item.getDescription(), String.valueOf(item.isAvailable()));
+        final ItemDto itemDto = new ItemDto();
+
+        itemDto.setId(item.getId());
+        itemDto.setName(item.getName());
+        itemDto.setDescription(item.getDescription());
+        itemDto.setAvailable(String.valueOf(item.isAvailable()));
+
+        return itemDto;
     }
 
     public static List<ItemDto> item2ItemDtoList(final List<Item> items) {

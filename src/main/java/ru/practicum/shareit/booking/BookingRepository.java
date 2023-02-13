@@ -1,8 +1,11 @@
 package ru.practicum.shareit.booking;
 
+import org.hibernate.sql.Select;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.Status;
+import ru.practicum.shareit.user.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,4 +35,20 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findAllByItem_Owner_IdAndEndBeforeOrderByStartDesc(long ownerId, LocalDateTime pastDate);
 
     Optional<Booking> findBookingByBooker_IdAndItem_IdAndStatusAndEndBefore(long bookerId, long itemId, Status status, LocalDateTime currentDate);
+
+    @Query("SELECT booking FROM Booking AS booking " +
+            "WHERE booking.item.id = ?2 " +
+            "AND booking.start <= ?3 " +
+            "AND booking.item.owner.id = ?1 " +
+            "AND booking.status <> 'REJECTED' " +
+            "ORDER BY booking.start DESC ")
+    List<Booking> findLastBookingByItem_Id(long userId, long itemId, LocalDateTime currentDate);
+
+    @Query("SELECT booking FROM Booking AS booking " +
+            "WHERE booking.item.id = ?2 " +
+            "AND booking.item.owner.id = ?1 " +
+            "AND booking.start > ?3 " +
+            "AND booking.status <> 'REJECTED' " +
+            "ORDER BY booking.start ASC")
+    List<Booking> findNextBookingByItem_Id(long userId, long itemId, LocalDateTime currentDate);
 }

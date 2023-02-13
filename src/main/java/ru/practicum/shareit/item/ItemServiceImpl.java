@@ -6,7 +6,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.Status;
 import ru.practicum.shareit.booking.Booking;
+import ru.practicum.shareit.booking.BookingMapper;
 import ru.practicum.shareit.booking.BookingRepository;
+import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.dto.BookingItemDto;
 import ru.practicum.shareit.exception.MismatchException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.CommentDto;
@@ -18,6 +21,8 @@ import ru.practicum.shareit.user.UserRepository;
 
 import javax.validation.ValidationException;
 import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,10 +50,33 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto getItemById(long itemId) {
+    public ItemDto getItemById(long itemId, long userId) {
         final Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException(String.format("Item id = %d not found", itemId)));
+
+        final BookingItemDto lastBooking = bookingRepository
+                .findLastBookingByItem_Id(userId, itemId, LocalDateTime.now())
+                .stream()
+                .findFirst()
+                .map(BookingMapper::map2BookindItemDto)
+                .orElse(null);
+        final BookingItemDto nextBooking = bookingRepository
+                .findNextBookingByItem_Id(userId, itemId, LocalDateTime.now())
+                .stream()
+                .findFirst()
+                .map(BookingMapper::map2BookindItemDto)
+                .orElse(null);
+
+        List<CommentDto> comments = commentRepository.findCommentByItem_Id(itemId)
+                .stream()
+                .map(CommentMapper::map2CommentDto)
+                .collect(Collectors.toList());
+
         final ItemDto itemDto = ItemMapper.item2ItemDto(item);
+
+        itemDto.setLastBooking(lastBooking);
+        itemDto.setNextBooking(nextBooking);
+        itemDto.setComments(comments);
 
         return itemDto;
     }
@@ -58,7 +86,7 @@ public class ItemServiceImpl implements ItemService {
         return itemRepository.findAll()
                 .stream()
                 .filter(item -> item.getOwner().getId() == userId )
-                .map(ItemMapper::item2ItemDto)
+                .map(item -> getItemById(item.getId(), userId))
                 .collect(Collectors.toList());
     }
 

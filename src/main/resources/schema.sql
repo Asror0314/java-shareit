@@ -1,9 +1,3 @@
-
-drop table if exists comment;
-drop table if exists booking;
-drop table if exists ITEM;
-drop table if exists USERS;
-
 CREATE TABLE IF NOT EXISTS PUBLIC.users (
     id BIGINT AUTO_INCREMENT,
     username CHARACTER VARYING(100) NOT NULL,
