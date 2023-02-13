@@ -1,6 +1,8 @@
+
+drop table if exists comment;
 drop table if exists booking;
--- drop table if exists ITEM;
--- drop table if exists USERS;
+drop table if exists ITEM;
+drop table if exists USERS;
 
 CREATE TABLE IF NOT EXISTS PUBLIC.users (
     id BIGINT AUTO_INCREMENT,
@@ -30,5 +32,16 @@ CREATE TABLE IF NOT EXISTS PUBLIC.booking (
     CONSTRAINT BOOKING_PK PRIMARY KEY (id),
     CONSTRAINT BOOKING_FK FOREIGN KEY (booker_id) REFERENCES PUBLIC.users(id),
     CONSTRAINT BOOKING_FK2 FOREIGN KEY (item_id) REFERENCES PUBLIC.item(id)
+);
+
+CREATE TABLE IF NOT EXISTS PUBLIC.comment (
+    id BIGINT AUTO_INCREMENT,
+    text CHARACTER VARYING(200) NOT NULL,
+    item_id BIGINT NOT NULL,
+    author_id BIGINT NOT NULL,
+    created TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    CONSTRAINT COMMNET_PK PRIMARY KEY (id),
+    CONSTRAINT COMMNET_FK FOREIGN KEY (author_id) REFERENCES PUBLIC.users(id),
+    CONSTRAINT COMMNET_FK2 FOREIGN KEY (item_id) REFERENCES PUBLIC.item(id)
 );
 

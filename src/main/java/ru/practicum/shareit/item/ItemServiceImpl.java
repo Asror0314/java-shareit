@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
@@ -95,5 +96,20 @@ public class ItemServiceImpl implements ItemService {
         final List<Item> itemList = itemRepository.searchItemByText(text.toLowerCase());
 
         return ItemMapper.item2ItemDtoList(itemList);
+    }
+
+    @Override
+    public CommentDto addNewComment(
+            CommentDto commentDto,
+            long userId,
+            long itemId
+    ) {
+        final User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(String.format("User id = %d not found", userId)));
+        final Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new NotFoundException(String.format("Item id = %d not found", itemId)));
+
+        CommentMapper.map2Comment(commentDto, user, item);
+        return null;
     }
 }
