@@ -57,15 +57,4 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(userId);
     }
 
-//    private void isEmailExist(User user) {
-//        boolean isExist = userRepository.findAll()
-//                .stream()
-//                .map(User::getEmail)
-//                .anyMatch(
-//                        users -> users.equals(user.getEmail()));
-//        if (isExist) {
-//            throw new AlreadyExistsException(String.format("User email = '%s' already exists", user.getEmail()));
-//        }
-//    }
-
 }
