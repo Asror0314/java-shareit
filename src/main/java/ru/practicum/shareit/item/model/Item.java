@@ -1,21 +1,36 @@
 package ru.practicum.shareit.item.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.Type;
 import ru.practicum.shareit.user.User;
+
+import javax.persistence.*;
 
 /**
  * TODO Sprint add-controllers.
  */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Entity
+@Table(name = "item")
+@Getter
+@Setter
+@ToString
 public class Item {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "itemname")
     private String name;
+
+    @Column(name = "description")
     private String description;
+
+    @Column(name = "available")
+    @Type(type = "boolean")
     private boolean available;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
     private User owner;
 }
