@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.Pages;
+import ru.practicum.shareit.PagesForSort;
 import ru.practicum.shareit.Status;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
@@ -42,7 +42,7 @@ public class BookingServiceImpl implements BookingService {
         userRepository.findById(bookerId)
                 .orElseThrow(() -> new NotFoundException(String.format("User id = %d not found", bookerId)));
 
-        if (Pages.createPage(from, size)) {
+        if (PagesForSort.createPage(from, size)) {
             return bookingRepository.findAllByBooker(bookerId, from, size)
                     .stream()
                     .map(BookingMapper::map2BookingDto)
@@ -92,7 +92,7 @@ public class BookingServiceImpl implements BookingService {
         userRepository.findById(ownerId)
                 .orElseThrow(() -> new NotFoundException(String.format("User id = %d not found", ownerId)));
 
-        if (Pages.createPage(from, size)) {
+        if (PagesForSort.createPage(from, size)) {
             return bookingRepository.findAllByItemOwner(ownerId, from, size)
                     .stream()
                     .map(BookingMapper::map2BookingDto)

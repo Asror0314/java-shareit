@@ -2,7 +2,7 @@ package ru.practicum.shareit;
 
 import javax.validation.ValidationException;
 
-public class Pages {
+public class PagesForSort {
 
     public static boolean createPage(String from, String size) {
         if (from != null && size != null) {

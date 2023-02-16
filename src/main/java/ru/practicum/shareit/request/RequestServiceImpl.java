@@ -3,7 +3,7 @@ package ru.practicum.shareit.request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.Pages;
+import ru.practicum.shareit.PagesForSort;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.user.User;
@@ -58,7 +58,7 @@ public class RequestServiceImpl implements RequestService {
         userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException(String.format("User id = %d not found", userId)));
 
-        if (Pages.createPage(from, size)) {
+        if (PagesForSort.createPage(from, size)) {
             return requestRepository.findAllForOtherUserWithPagination(userId, from, size)
                     .stream()
                     .map(RequestMapper::map2RequestDto)
