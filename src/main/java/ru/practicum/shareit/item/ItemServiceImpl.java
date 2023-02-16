@@ -155,14 +155,10 @@ public class ItemServiceImpl implements ItemService {
         final Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException(String.format("Item id = %d not found", itemId)));
 
-        Booking booking = bookingRepository
+        bookingRepository
                 .findBookingByBooker_IdAndItem_IdAndStatusAndEndBefore(userId, itemId, Status.APPROVED, LocalDateTime.now())
                 .orElseThrow(() -> new ValidationException(
                         String.format("User id = %d the user has not booked this item id = %d", userId, itemId)));
-
-        System.out.println(booking.getId());
-        System.out.println(booking.getItem().getId());
-        System.out.println(booking.getBooker().getId());
 
         final Comment comment = CommentMapper.map2Comment(commentDto, user, item);
 
