@@ -22,7 +22,7 @@ public class BookingMapper {
         bookingDto.setEnd(booking.getEnd());
         bookingDto.setStatus(booking.getStatus());
         bookingDto.setBooker(booking.getBooker());
-        bookingDto.setItem(ItemMapper.item2ItemDto(booking.getItem()));
+        bookingDto.setItem(ItemMapper.map2ItemDto(booking.getItem()));
 
         return bookingDto;
     }

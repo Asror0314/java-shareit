@@ -14,6 +14,8 @@ import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.ItemRequest;
+import ru.practicum.shareit.request.RequestRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
 
@@ -31,18 +33,21 @@ public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
+    private final RequestRepository requestRepository;
 
     @Autowired
     public ItemServiceImpl(
             ItemRepository itemRepository,
             UserRepository userRepository,
             BookingRepository bookingRepository,
-            CommentRepository commentRepository
+            CommentRepository commentRepository,
+            RequestRepository requestRepository
     ) {
         this.itemRepository = itemRepository;
         this.userRepository = userRepository;
         this.bookingRepository = bookingRepository;
         this.commentRepository = commentRepository;
+        this.requestRepository = requestRepository;
     }
 
     @Override
@@ -68,7 +73,7 @@ public class ItemServiceImpl implements ItemService {
                 .map(CommentMapper::map2CommentDto)
                 .collect(Collectors.toList());
 
-        final ItemDto itemDto = ItemMapper.item2ItemDto(item);
+        final ItemDto itemDto = ItemMapper.map2ItemDto(item);
 
         itemDto.setLastBooking(lastBooking);
         itemDto.setNextBooking(nextBooking);
@@ -91,10 +96,11 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto addNewItem(ItemDto itemDto, long userId) {
         final User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(String.format("User id = %d not found", userId)));
-        final Item item = ItemMapper.itemDto2Item(itemDto, user);
+        final ItemRequest request = requestRepository.findById(itemDto.getRequestId()).orElse(null);
+        final Item item = ItemMapper.map2Item(itemDto, user, request);
         final Item newItem = itemRepository.save(item);
 
-        return ItemMapper.item2ItemDto(newItem);
+        return ItemMapper.map2ItemDto(newItem);
     }
 
     @Override
@@ -120,11 +126,11 @@ public class ItemServiceImpl implements ItemService {
             newItemDto.setDescription(item.getDescription());
         }
 
-        final Item newItem = ItemMapper.itemDto2Item(newItemDto, user);
+        final Item newItem = ItemMapper.map2Item(newItemDto, user, item.getRequest());
         newItem.setId(itemId);
 
         final Item updatedItem = itemRepository.save(newItem);
-        return ItemMapper.item2ItemDto(updatedItem);
+        return ItemMapper.map2ItemDto(updatedItem);
     }
 
     @Override
@@ -135,7 +141,7 @@ public class ItemServiceImpl implements ItemService {
         }
         final List<Item> itemList = itemRepository.searchItemByText(text.toLowerCase());
 
-        return ItemMapper.item2ItemDtoList(itemList);
+        return ItemMapper.map2ItemDtoList(itemList);
     }
 
     @Override
