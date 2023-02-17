@@ -6,8 +6,8 @@ public class PagesForSort {
 
     public static boolean createPage(String from, String size) {
         if (from != null && size != null) {
-            final int fromInt = Integer.valueOf(from);
-            final int sizeInt = Integer.valueOf(size);
+            final int fromInt = Integer.parseInt(from);
+            final int sizeInt = Integer.parseInt(size);
 
             if (fromInt < 0) {
                 throw new ValidationException(String.format("From cannot be less than 0!"));
