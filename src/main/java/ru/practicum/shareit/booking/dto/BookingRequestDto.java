@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.Status;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
@@ -12,8 +13,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class BookingRequestDto {
 
+    @NotNull
     private LocalDateTime start;
 
+    @NotNull
     private LocalDateTime end;
 
     private long itemId;

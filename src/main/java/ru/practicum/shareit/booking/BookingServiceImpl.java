@@ -65,7 +65,7 @@ public class BookingServiceImpl implements BookingService {
                     .collect(Collectors.toList());
         } else if (state.equals("CURRENT")) {
             return bookingRepository
-                    .findAllByBooker_IdAndStartBeforeAndEndAfterOrderByStartDesc(bookerId,
+                    .findAllByBooker_IdAndStartBeforeAndEndAfterOrderByEndDesc(bookerId,
                             LocalDateTime.now(), LocalDateTime.now())
                     .stream()
                     .map(BookingMapper::map2BookingDto)
@@ -159,7 +159,7 @@ public class BookingServiceImpl implements BookingService {
 
         if (bookingDto.getEnd().isBefore(LocalDateTime.now())
                 || bookingDto.getStart().isBefore(LocalDateTime.now())
-                || bookingDto.getStart().isAfter(bookingDto.getEnd())
+                || !bookingDto.getStart().isBefore(bookingDto.getEnd())
         ) {
             throw new DateTimeException("DateTime booking entered incorrectly!");
         }

@@ -155,7 +155,7 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow(() -> new NotFoundException(String.format("Item id = %d not found", itemId)));
 
         bookingRepository
-                .findBookingByBooker_IdAndItem_IdAndStatusAndEndBefore(userId, itemId, Status.APPROVED, LocalDateTime.now())
+                .findBookingByBookerIdAndItemId(userId, itemId, Status.APPROVED, LocalDateTime.now())
                 .orElseThrow(() -> new ValidationException(
                         String.format("User id = %d the user has not booked this item id = %d", userId, itemId)));
 
