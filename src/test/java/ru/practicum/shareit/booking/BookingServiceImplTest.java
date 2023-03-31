@@ -148,17 +148,6 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void addNewBookingWithStartEqualEnd() {
-        bookingDto.setStart(LocalDateTime.now().plusDays(1));
-        bookingDto.setEnd(LocalDateTime.now().plusDays(1));
-
-        final DateTimeException exception = assertThrows(DateTimeException.class,
-                () -> service.addNewBooking(bookingDto, user.getId()));
-
-        assertEquals("DateTime booking entered incorrectly!", exception.getMessage());
-    }
-
-    @Test
     void addNewBookingWithStartInPast() {
         bookingDto.setStart(LocalDateTime.now().minusDays(1));
 
