@@ -9,7 +9,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ru.practicum.shareit.Status;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingRepository;
-import ru.practicum.shareit.booking.dto.BookingItemDto;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -240,7 +239,7 @@ class ItemServiceImplTest {
                 .when(mockItemRepository.findById(Mockito.anyLong()))
                 .thenAnswer(invocationOnMock -> {
                     Long itemId = invocationOnMock.getArgument(0, Long.class);
-                    if(itemId == 1) {
+                    if (itemId == 1) {
                         return Optional.of(item);
                     } else {
                         return Optional.of(item2);

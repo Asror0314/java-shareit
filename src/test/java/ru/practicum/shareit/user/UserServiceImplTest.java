@@ -123,7 +123,7 @@ class UserServiceImplTest {
         Mockito.verify(mockUserRepository, Mockito.times(1))
                 .deleteById(2L);
 
-        Assertions.assertThrows(NotFoundException.class, ()-> userService.getUserById(2L));
+        Assertions.assertThrows(NotFoundException.class, () -> userService.getUserById(2L));
 
     }
 }

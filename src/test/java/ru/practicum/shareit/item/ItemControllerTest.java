@@ -35,7 +35,7 @@ class ItemControllerTest {
     private ObjectMapper mapper = new ObjectMapper();
     private MockMvc mvc;
     private ItemDto itemDto = new ItemDto(1L, "name","description","true",
-                        null,null,null,0L);;
+                        null,null,null,0L);
 
     @BeforeEach
     void beforeEach() {

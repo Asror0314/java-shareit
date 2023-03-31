@@ -1,6 +1,5 @@
 package ru.practicum.shareit;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -10,7 +9,6 @@ import ru.practicum.shareit.exception.MismatchException;
 import ru.practicum.shareit.exception.NotFoundException;
 
 import javax.validation.ValidationException;
-import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 public class ErrorHandlerController {

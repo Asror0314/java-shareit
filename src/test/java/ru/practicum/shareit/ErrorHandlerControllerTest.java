@@ -1,15 +1,12 @@
 package ru.practicum.shareit;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.exception.DateTimeException;
 import ru.practicum.shareit.exception.MismatchException;
@@ -21,7 +18,6 @@ import ru.practicum.shareit.user.UserService;
 import javax.validation.ValidationException;
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -35,7 +31,7 @@ class ErrorHandlerControllerTest {
     private UserService service;
     @Autowired
     private MockMvc mvc;
-    private User user = new User(1L, "name", "email@gmail.com");;
+    private User user = new User(1L, "name", "email@gmail.com");
 
     @Test
     void handleNotFound() throws Exception {
