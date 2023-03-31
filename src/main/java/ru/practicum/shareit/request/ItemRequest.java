@@ -1,9 +1,7 @@
 package ru.practicum.shareit.request;
 
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 
@@ -20,7 +18,8 @@ import java.util.Objects;
 @Table(name = "request")
 @Getter
 @Setter
-@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class ItemRequest {
 
     @Id
@@ -40,16 +39,4 @@ public class ItemRequest {
     @OneToMany(mappedBy = "request")
     private List<Item> items;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ItemRequest that = (ItemRequest) o;
-        return id == that.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

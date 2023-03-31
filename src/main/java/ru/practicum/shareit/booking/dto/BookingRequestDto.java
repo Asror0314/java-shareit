@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,13 +14,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class BookingRequestDto {
 
+    private long itemId;
+
     @NotNull
     private LocalDateTime start;
 
     @NotNull
     private LocalDateTime end;
-
-    private long itemId;
 
     private Status status;
 }

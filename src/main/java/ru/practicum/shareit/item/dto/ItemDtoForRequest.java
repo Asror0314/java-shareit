@@ -10,8 +10,6 @@ import java.beans.Transient;
  */
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class ItemDtoForRequest {
 
     private Long id;

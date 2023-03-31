@@ -50,9 +50,53 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
+    public ItemDto addNewItem(ItemDto itemDto, long userId) {
+        final User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(String.format("User id = %d not found", userId)));
+        final ItemRequest request = requestRepository.findById(itemDto.getRequestId()).orElse(null);
+        final Item item = ItemMapper.map2Item(itemDto, user, request);
+        final Item newItem = itemRepository.save(item);
+
+        return ItemMapper.map2ItemDto(newItem);
+    }
+
+    @Override
+    @Transactional
+    public ItemDto updateItem(ItemDto newItemDto, long itemId, long userId) {
+        final User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(String.format("User id = %d not found", userId)));
+        final Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new NotFoundException(String.format("Item id = %d not found", itemId)));
+
+        if (!item.getOwner().getId().equals(userId)) {
+            throw new NotFoundException(String.format("User id = '%d' not match", userId));
+        }
+
+        newItemDto.setId(itemId);
+        if (newItemDto.getStringAvailable() == null) {
+            newItemDto.setAvailable(String.valueOf(item.isAvailable()));
+        }
+        if (newItemDto.getName() == null) {
+            newItemDto.setName(item.getName());
+        }
+        if (newItemDto.getDescription() == null) {
+            newItemDto.setDescription(item.getDescription());
+        }
+
+        final Item newItem = ItemMapper.map2Item(newItemDto, user, item.getRequest());
+        newItem.setId(itemId);
+
+        final Item updatedItem = itemRepository.save(newItem);
+        return ItemMapper.map2ItemDto(updatedItem);
+    }
+
+    @Override
     public ItemDto getItemById(long itemId, long userId) {
         final Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException(String.format("Item id = %d not found", itemId)));
+        userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(String.format("User id = %d not found", userId)));
 
         final BookingItemDto lastBooking = bookingRepository
                 .findLastBookingByItem_Id(userId, itemId, LocalDateTime.now())
@@ -92,48 +136,6 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public ItemDto addNewItem(ItemDto itemDto, long userId) {
-        final User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(String.format("User id = %d not found", userId)));
-        final ItemRequest request = requestRepository.findById(itemDto.getRequestId()).orElse(null);
-        final Item item = ItemMapper.map2Item(itemDto, user, request);
-        final Item newItem = itemRepository.save(item);
-
-        return ItemMapper.map2ItemDto(newItem);
-    }
-
-    @Override
-    @Transactional
-    public ItemDto updateItem(ItemDto newItemDto, long itemId, long userId) {
-        final User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(String.format("User id = %d not found", userId)));
-        final Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new NotFoundException(String.format("Item id = %d not found", itemId)));
-
-        if (!item.getOwner().getId().equals(userId)) {
-            throw new NotFoundException(String.format("User id = '%d' not match", itemId));
-        }
-
-        newItemDto.setId(itemId);
-        if (newItemDto.getStringAvailable() == null) {
-            newItemDto.setAvailable(String.valueOf(item.isAvailable()));
-        }
-        if (newItemDto.getName() == null) {
-            newItemDto.setName(item.getName());
-        }
-        if (newItemDto.getDescription() == null) {
-            newItemDto.setDescription(item.getDescription());
-        }
-
-        final Item newItem = ItemMapper.map2Item(newItemDto, user, item.getRequest());
-        newItem.setId(itemId);
-
-        final Item updatedItem = itemRepository.save(newItem);
-        return ItemMapper.map2ItemDto(updatedItem);
-    }
-
-    @Override
-    @Transactional
     public List<ItemDto> searchItemByText(String text) {
         if (text.isBlank()) {
             return List.of();
@@ -161,8 +163,8 @@ public class ItemServiceImpl implements ItemService {
 
         final Comment comment = CommentMapper.map2Comment(commentDto, user, item);
 
-        commentRepository.save(comment);
+        Comment savedComment = commentRepository.save(comment);
 
-        return CommentMapper.map2CommentDto(comment);
+        return CommentMapper.map2CommentDto(savedComment);
     }
 }

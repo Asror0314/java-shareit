@@ -1,9 +1,7 @@
 package ru.practicum.shareit.booking;
 
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import ru.practicum.shareit.Status;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
@@ -19,7 +17,8 @@ import java.time.LocalDateTime;
 @Table(name = "booking")
 @Getter
 @Setter
-@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class Booking {
 
     @Id

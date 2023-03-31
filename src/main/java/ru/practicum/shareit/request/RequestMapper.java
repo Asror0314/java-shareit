@@ -36,9 +36,4 @@ public class RequestMapper {
         return requestDto;
     }
 
-    public static List<ItemRequestDto> map2RequestDto(List<ItemRequest> requests) {
-        return requests.stream()
-                .map(RequestMapper::map2RequestDto)
-                .collect(Collectors.toList());
-    }
 }

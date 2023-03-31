@@ -43,7 +43,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public List<ItemRequestDto> getYourRequests(long userId) {
+    public List<ItemRequestDto> getOwnRequests(long userId) {
         userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException(String.format("User id = %d not found", userId)));
         final List<ItemRequest> requests = requestRepository.findAllByRequester_Id(userId);

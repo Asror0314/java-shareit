@@ -37,6 +37,82 @@ public class BookingServiceImpl implements BookingService {
         this.itemRepository = itemRepository;
     }
 
+
+    @Override
+    @Transactional
+    public BookingDto addNewBooking(BookingRequestDto bookingDto, long userId) {
+        bookingDto.setStatus(Status.WAITING);
+
+        if (bookingDto.getEnd().isBefore(LocalDateTime.now())
+                || bookingDto.getStart().isBefore(LocalDateTime.now())
+                || !bookingDto.getStart().isBefore(bookingDto.getEnd())
+        ) {
+            throw new DateTimeException("DateTime booking entered incorrectly!");
+        }
+
+        final User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(String.format("User id = %d not found", userId)));
+        final Item item = itemRepository.findById(bookingDto.getItemId())
+                .orElseThrow(() -> new NotFoundException(String.format("Item id = %d not found", bookingDto.getItemId())));
+
+        if (item.getOwner().getId().equals(userId)) {
+            throw new MismatchException(String.format("Item owner this user"));
+        }
+
+        if (!item.isAvailable()) {
+            throw new ValidationException(String.format("Booking create from userId = %d to itemId = %d unavailable",
+                    userId, item.getId()));
+        }
+
+        final Booking booking = BookingMapper.map2Booking(bookingDto, user, item);
+        final Booking savedBooking = bookingRepository.save(booking);
+
+        return BookingMapper.map2BookingDto(savedBooking);
+    }
+
+    @Override
+    @Transactional
+    public BookingDto updateBookingStatus(long bookingId, boolean status, long ownerId) {
+        final Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new NotFoundException(String.format("Booking id = %d not found", bookingId)));
+        userRepository.findById(ownerId)
+                .orElseThrow(() -> new NotFoundException(String.format("User id = %d not found", ownerId)));
+
+        if (!booking.getItem().getOwner().getId().equals(ownerId)) {
+            throw new MismatchException(String.format("Item owner other user"));
+        }
+
+        if (!booking.getStatus().equals(Status.WAITING)) {
+            throw new ValidationException(String.format("Booking status has already been changed"));
+        }
+
+        if (status) {
+            booking.setStatus(Status.APPROVED);
+        } else {
+            booking.setStatus(Status.REJECTED);
+        }
+
+        final Booking updatedBooking = bookingRepository.save(booking);
+        return BookingMapper.map2BookingDto(updatedBooking);
+    }
+
+    @Override
+    public BookingDto getBookingById(long bookingId, long userId) {
+        final Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new NotFoundException(String.format("Booking id = %d not found", bookingId)));
+        userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(String.format("User id = %d not found", userId)));
+
+        final Long bookerId = booking.getBooker().getId();
+        final Long ownerId = booking.getItem().getOwner().getId();
+
+        if (!bookerId.equals(userId) && !ownerId.equals(userId)) {
+            throw new MismatchException(String.format("user id = %d mismatch", userId));
+        }
+
+        return BookingMapper.map2BookingDto(booking);
+    }
+
     @Override
     public List<BookingDto> getAllBooking(long bookerId, String state, String from, String size) {
         userRepository.findById(bookerId)
@@ -137,75 +213,4 @@ public class BookingServiceImpl implements BookingService {
         }
     }
 
-    @Override
-    public BookingDto getBookingById(long bookingId, long userId) {
-        final Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new NotFoundException(String.format("Booking id = %d not found", bookingId)));
-
-        final Long bookerId = booking.getBooker().getId();
-        final Long ownerId = booking.getItem().getOwner().getId();
-
-        if (!bookerId.equals(userId) && !ownerId.equals(userId)) {
-            throw new MismatchException(String.format("user id = %d mismatch", userId));
-        }
-
-        return BookingMapper.map2BookingDto(booking);
-    }
-
-    @Override
-    @Transactional
-    public BookingDto addNewBooking(BookingRequestDto bookingDto, long userId) {
-        bookingDto.setStatus(Status.WAITING);
-
-        if (bookingDto.getEnd().isBefore(LocalDateTime.now())
-                || bookingDto.getStart().isBefore(LocalDateTime.now())
-                || !bookingDto.getStart().isBefore(bookingDto.getEnd())
-        ) {
-            throw new DateTimeException("DateTime booking entered incorrectly!");
-        }
-
-        final User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(String.format("User id = %d not found", userId)));
-        final Item item = itemRepository.findById(bookingDto.getItemId())
-                .orElseThrow(() -> new NotFoundException(String.format("Item id = %d not found", bookingDto.getItemId())));
-
-        if (item.getOwner().getId().equals(userId)) {
-           throw new MismatchException(String.format("Item owner other user"));
-        }
-
-        if (!item.isAvailable()) {
-            throw new ValidationException(String.format("Booking create from userId = %d to itemId = %d unavailable",
-                    userId, item.getId()));
-        }
-        final Booking booking = BookingMapper.map2Booking(bookingDto, user, item);
-
-        bookingRepository.save(booking);
-        return BookingMapper.map2BookingDto(booking);
-    }
-
-    @Override
-    @Transactional
-    public BookingDto updateBookingStatus(long bookingId, boolean status, long ownerId) {
-        final Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new NotFoundException(String.format("Booking id = %d not found", bookingId)));
-        userRepository.findById(ownerId)
-                .orElseThrow(() -> new NotFoundException(String.format("User id = %d not found", ownerId)));
-
-        if (!booking.getItem().getOwner().getId().equals(ownerId)) {
-            throw new MismatchException(String.format("Item owner other user"));
-        }
-
-        if (!booking.getStatus().equals(Status.WAITING)) {
-            throw new ValidationException(String.format("Booking status has already been changed"));
-        }
-
-       if (status) {
-           booking.setStatus(Status.APPROVED);
-       } else {
-           booking.setStatus(Status.REJECTED);
-       }
-
-       bookingRepository.save(booking);
-       return BookingMapper.map2BookingDto(booking);
-    }
 }
