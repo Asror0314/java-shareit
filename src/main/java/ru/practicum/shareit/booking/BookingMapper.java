@@ -7,12 +7,7 @@ import ru.practicum.shareit.item.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
-
 public class BookingMapper {
-
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneOffset.UTC);
 
     public static BookingDto map2BookingDto(Booking booking) {
         final BookingDto bookingDto = new BookingDto();

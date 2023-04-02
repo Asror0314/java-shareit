@@ -1,7 +1,7 @@
 package ru.practicum.shareit.item;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.Status;
@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
+@AllArgsConstructor
 @Slf4j
 public class ItemServiceImpl implements ItemService {
 
@@ -33,21 +34,6 @@ public class ItemServiceImpl implements ItemService {
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
     private final RequestRepository requestRepository;
-
-    @Autowired
-    public ItemServiceImpl(
-            ItemRepository itemRepository,
-            UserRepository userRepository,
-            BookingRepository bookingRepository,
-            CommentRepository commentRepository,
-            RequestRepository requestRepository
-    ) {
-        this.itemRepository = itemRepository;
-        this.userRepository = userRepository;
-        this.bookingRepository = bookingRepository;
-        this.commentRepository = commentRepository;
-        this.requestRepository = requestRepository;
-    }
 
     @Override
     @Transactional

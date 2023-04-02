@@ -11,10 +11,10 @@ public interface BookingService {
 
     List<BookingDto> getAllBookingForOwner(long ownerId, String state, String from, String size);
 
-    BookingDto getBookingById(long bookingDtoId, long userId);
+    BookingDto getBookingById(long bookingDtoId, Long userId);
 
-    BookingDto addNewBooking(BookingRequestDto bookingDto, long userId);
+    BookingDto addNewBooking(BookingRequestDto bookingDto, Long userId);
 
-    BookingDto updateBookingStatus(long bookingId, boolean status, long ownerId);
+    BookingDto updateBookingStatus(long bookingId, boolean status, Long ownerId);
 
 }

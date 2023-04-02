@@ -1,6 +1,7 @@
 package ru.practicum.shareit.request;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,7 +49,8 @@ class RequestControllerTest {
     }
 
     @Test
-    void addNewRequest() throws Exception {
+    @SneakyThrows
+    void addNewRequest() {
         Mockito
                 .when(service.addNewRequest(Mockito.any(), Mockito.anyLong()))
                 .thenReturn(responseDto);
@@ -64,7 +66,8 @@ class RequestControllerTest {
     }
 
     @Test
-    void getOwnRequests() throws Exception {
+    @SneakyThrows
+    void getOwnRequests() {
         Mockito
                 .when(service.getOwnRequests(Mockito.anyLong()))
                 .thenReturn(Arrays.asList(responseDto));
@@ -77,7 +80,8 @@ class RequestControllerTest {
     }
 
     @Test
-    void getAllRequests() throws Exception {
+    @SneakyThrows
+    void getAllRequests() {
         Mockito
                 .when(service.getAllRequests(Mockito.anyLong(), Mockito.anyString(), Mockito.anyString()))
                 .thenReturn(Arrays.asList(responseDto));
@@ -92,7 +96,8 @@ class RequestControllerTest {
     }
 
     @Test
-    void getRequestById() throws Exception {
+    @SneakyThrows
+    void getRequestById() {
         Mockito
                 .when(service.getRequestById(Mockito.anyLong(), Mockito.anyLong()))
                 .thenReturn(responseDto);

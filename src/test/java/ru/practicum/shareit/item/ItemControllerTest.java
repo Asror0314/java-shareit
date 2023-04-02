@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,7 +46,8 @@ class ItemControllerTest {
     }
 
     @Test
-    void getItemById() throws Exception {
+    @SneakyThrows
+    void getItemById() {
         Mockito.when(service.getItemById(anyLong(), anyLong()))
                 .thenReturn(itemDto);
 
@@ -60,7 +62,8 @@ class ItemControllerTest {
     }
 
     @Test
-    void getAllItems() throws Exception {
+    @SneakyThrows
+    void getAllItems() {
         Mockito.when(service.getAllItems(anyLong()))
                 .thenReturn(Arrays.asList(itemDto));
 
@@ -75,7 +78,8 @@ class ItemControllerTest {
     }
 
     @Test
-    void addNewItem() throws Exception {
+    @SneakyThrows
+    void addNewItem() {
         Mockito.when(service.addNewItem(any(), anyLong()))
                 .thenReturn(itemDto);
 
@@ -91,7 +95,8 @@ class ItemControllerTest {
     }
 
     @Test
-    void updateItem() throws Exception {
+    @SneakyThrows
+    void updateItem() {
         itemDto.setAvailable("false");
         itemDto.setAvailable("false");
 
@@ -111,7 +116,8 @@ class ItemControllerTest {
     }
 
     @Test
-    void searchItemByText() throws Exception {
+    @SneakyThrows
+    void searchItemByText() {
         Mockito.when(service.searchItemByText(anyString()))
                 .thenReturn(Arrays.asList(itemDto));
 
@@ -128,7 +134,8 @@ class ItemControllerTest {
     }
 
     @Test
-    void addNewComment() throws Exception {
+    @SneakyThrows
+    void addNewComment() {
         final CommentDto responseComment = new CommentDto(1L, "text", "authorName", LocalDateTime.now());
         final CommentDto requestComment = new CommentDto();
         requestComment.setText("text");

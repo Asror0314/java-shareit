@@ -1,6 +1,6 @@
 package ru.practicum.shareit.request;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.PagesForSort;
@@ -14,20 +14,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 @Transactional(readOnly = true)
 public class RequestServiceImpl implements RequestService {
 
     private final RequestRepository requestRepository;
     private final UserRepository userRepository;
-
-    @Autowired
-    public RequestServiceImpl(
-            RequestRepository requestRepository,
-            UserRepository userRepository
-    ) {
-        this.requestRepository = requestRepository;
-        this.userRepository = userRepository;
-    }
 
     @Override
     @Transactional

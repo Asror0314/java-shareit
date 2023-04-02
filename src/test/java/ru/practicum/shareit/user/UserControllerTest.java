@@ -1,6 +1,7 @@
 package ru.practicum.shareit.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,7 +45,8 @@ class UserControllerTest {
     }
 
     @Test
-    void getAllUsers() throws Exception {
+    @SneakyThrows
+    void getAllUsers() {
         Mockito
                 .when(userService.getAllUsers())
                 .thenReturn(Arrays.asList(user, user2));
@@ -54,7 +56,8 @@ class UserControllerTest {
     }
 
     @Test
-    void getUserById() throws Exception {
+    @SneakyThrows
+    void getUserById() {
         Mockito
                 .when(userService.getUserById(Mockito.anyLong()))
                 .thenReturn(user);
@@ -71,7 +74,8 @@ class UserControllerTest {
     }
 
     @Test
-    void addNewUser() throws Exception {
+    @SneakyThrows
+    void addNewUser() {
         Mockito
                 .when(userService.addUser(Mockito.any()))
                 .thenReturn(user);
@@ -88,7 +92,8 @@ class UserControllerTest {
     }
 
     @Test
-    void updateUser() throws Exception {
+    @SneakyThrows
+    void updateUser() {
         Mockito
                 .when(userService.updateUser(Mockito.any(), Mockito.anyLong()))
                 .thenReturn(user);
@@ -105,7 +110,8 @@ class UserControllerTest {
     }
 
     @Test
-    void deleteUser() throws Exception {
+    @SneakyThrows
+    void deleteUser() {
         mvc.perform(delete("/users/{userId}", user.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());

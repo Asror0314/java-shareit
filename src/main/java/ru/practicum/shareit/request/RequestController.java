@@ -1,6 +1,6 @@
 package ru.practicum.shareit.request;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 
@@ -12,14 +12,10 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(path = "/requests")
+@AllArgsConstructor
 public class RequestController {
 
     private final RequestService requestService;
-
-    @Autowired
-    public RequestController(RequestService requestService) {
-        this.requestService = requestService;
-    }
 
     @PostMapping
     ItemRequestDto addNewRequest(

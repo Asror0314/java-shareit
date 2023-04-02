@@ -1,6 +1,7 @@
 package ru.practicum.shareit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,8 @@ class ErrorHandlerControllerTest {
     private User user = new User(1L, "name", "email@gmail.com");
 
     @Test
-    void handleNotFound() throws Exception {
+    @SneakyThrows
+    void handleNotFound() {
         Mockito.when(service.addUser(any()))
                 .thenThrow(NotFoundException.class);
 
@@ -46,7 +48,8 @@ class ErrorHandlerControllerTest {
     }
 
     @Test
-    void handleMismatch() throws Exception {
+    @SneakyThrows
+    void handleMismatch() {
         Mockito.when(service.addUser(any()))
                 .thenThrow(MismatchException.class);
 
@@ -58,7 +61,8 @@ class ErrorHandlerControllerTest {
     }
 
     @Test
-    void handleDateTime() throws Exception {
+    @SneakyThrows
+    void handleDateTime() {
         Mockito.when(service.addUser(any()))
                 .thenThrow(DateTimeException.class);
 
@@ -70,7 +74,8 @@ class ErrorHandlerControllerTest {
     }
 
     @Test
-    void handleValidation() throws Exception {
+    @SneakyThrows
+    void handleValidation() {
         Mockito.when(service.addUser(any()))
                 .thenThrow(ValidationException.class);
 
@@ -82,7 +87,8 @@ class ErrorHandlerControllerTest {
     }
 
     @Test
-    void handleRuntime() throws Exception {
+    @SneakyThrows
+    void handleRuntime() {
         Mockito.when(service.addUser(any()))
                 .thenThrow(RuntimeException.class);
 

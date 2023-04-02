@@ -2,6 +2,7 @@ package ru.practicum.shareit.booking;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,7 +55,8 @@ class BookingControllerTest {
     }
 
     @Test
-    void getAllBooking() throws Exception {
+    @SneakyThrows
+    void getAllBooking() {
         Mockito
                 .when(service.getAllBooking(anyLong(), anyString(), anyString(), anyString()))
                 .thenReturn(Arrays.asList(responseDto));
@@ -74,7 +76,8 @@ class BookingControllerTest {
     }
 
     @Test
-    void getAllBookingForOwner() throws Exception {
+    @SneakyThrows
+    void getAllBookingForOwner() {
         Mockito
                 .when(service.getAllBookingForOwner(anyLong(), anyString(), anyString(), anyString()))
                 .thenReturn(Arrays.asList(responseDto));
@@ -94,7 +97,8 @@ class BookingControllerTest {
     }
 
     @Test
-    void getBookingById() throws Exception {
+    @SneakyThrows
+    void getBookingById() {
         Mockito
                 .when(service.getBookingById(anyLong(), anyLong()))
                 .thenReturn(responseDto);
@@ -111,7 +115,8 @@ class BookingControllerTest {
     }
 
     @Test
-    void addNewBooking() throws Exception {
+    @SneakyThrows
+    void addNewBooking() {
         Mockito
                 .when(service.addNewBooking(any(), anyLong()))
                 .thenReturn(responseDto);
@@ -128,7 +133,8 @@ class BookingControllerTest {
     }
 
     @Test
-    void updateBookingStatus() throws Exception {
+    @SneakyThrows
+    void updateBookingStatus() {
         Mockito
                 .when(service.updateBookingStatus(anyLong(), anyBoolean(), anyLong()))
                 .thenReturn(responseDto);
