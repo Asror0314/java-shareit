@@ -1,6 +1,6 @@
 package ru.practicum.shareit.booking;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
@@ -12,30 +12,30 @@ import java.util.List;
  * TODO Sprint add-bookings.
  */
 @RestController
+@AllArgsConstructor
 @RequestMapping(path = "/bookings")
 public class BookingController {
 
     private final BookingService bookingService;
 
-    @Autowired
-    public BookingController(BookingService bookingService) {
-        this.bookingService = bookingService;
-    }
-
     @GetMapping
     public List<BookingDto> getAllBooking(
             @RequestHeader(value = "X-Sharer-User-Id") long userId,
-            @RequestParam(defaultValue = "ALL") String state
+            @RequestParam(defaultValue = "ALL") String state,
+            @RequestParam(required = false) String from,
+            @RequestParam(required = false) String size
             ) {
-        return bookingService.getAllBooking(userId, state);
+        return bookingService.getAllBooking(userId, state, from, size);
     }
 
     @GetMapping("/owner")
     public List<BookingDto> getAllBookingForOwner(
             @RequestHeader(value = "X-Sharer-User-Id") long userId,
-            @RequestParam(defaultValue = "ALL") String state
+            @RequestParam(defaultValue = "ALL") String state,
+            @RequestParam(required = false) String from,
+            @RequestParam(required = false) String size
             ) {
-        return bookingService.getAllBookingForOwner(userId, state);
+        return bookingService.getAllBookingForOwner(userId, state, from, size);
     }
 
     @GetMapping("/{bookingId}")

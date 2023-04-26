@@ -16,7 +16,10 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findAllByBooker_IdAndStatusOrderByStartDesc(long bookerId, Status status);
 
-    List<Booking> findAllByBooker_IdAndStartBeforeAndEndAfterOrderByStartDesc(long bookerId, LocalDateTime currentDate, LocalDateTime dateTime);
+    List<Booking> findAllByBooker_IdAndStartBeforeAndEndAfterOrderByEndDesc(
+            long bookerId,
+            LocalDateTime currentDate,
+            LocalDateTime dateTime);
 
     List<Booking> findAllByBooker_IdAndStartAfterOrderByStartDesc(long bookerId, LocalDateTime futureDate);
 
@@ -26,13 +29,39 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findAllByItem_Owner_IdAndStatusOrderByStartDesc(long ownerId, Status status);
 
-    List<Booking> findAllByItem_Owner_IdAndStartBeforeAndEndAfterOrderByStartDesc(long ownerId, LocalDateTime currentDate, LocalDateTime dateTime);
+    List<Booking> findAllByItem_Owner_IdAndStartBeforeAndEndAfterOrderByStartDesc(
+            long ownerId,
+            LocalDateTime currentDate,
+            LocalDateTime dateTime);
 
     List<Booking> findAllByItem_Owner_IdAndStartAfterOrderByStartDesc(long ownerId, LocalDateTime futureDate);
 
     List<Booking> findAllByItem_Owner_IdAndEndBeforeOrderByStartDesc(long ownerId, LocalDateTime pastDate);
 
-    Optional<Booking> findBookingByBooker_IdAndItem_IdAndStatusAndEndBefore(long bookerId, long itemId, Status status, LocalDateTime currentDate);
+    @Query(value = "SELECT booking.* FROM booking " +
+            "WHERE booking.booker_id = ?1 " +
+            "AND booking.item_id = ?2 " +
+            "AND booking.status = 'APPROVED' " +
+            "AND booking.end_booking < now() " +
+            "ORDER BY booking.end_booking DESC limit 1",
+            nativeQuery = true)
+    Optional<Booking> findBookingByBookerIdAndItemId(
+            long bookerId,
+            long itemId,
+            Status status,
+            LocalDateTime currentDate);
+
+    @Query(value = "SELECT booking.* FROM booking " +
+            "inner join item on booking.item_id = item.id " +
+            "WHERE item.owner_id = ?1 " +
+            "ORDER BY booking.start_booking DESC limit ?3 OFFSET ?2",
+            nativeQuery = true)
+    List<Booking> findAllByItemOwner(long ownerId, String from, String size);
+
+    @Query(value = "SELECT * FROM booking WHERE booking.booker_id = ?1 " +
+            "ORDER BY booking.start_booking DESC limit ?3 OFFSET ?2",
+            nativeQuery = true)
+    List<Booking> findAllByBooker(long bookerId, String from, String size);
 
     @Query("SELECT booking FROM Booking AS booking " +
             "WHERE booking.item.id = ?2 " +

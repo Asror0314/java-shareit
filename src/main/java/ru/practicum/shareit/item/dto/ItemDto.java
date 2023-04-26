@@ -38,9 +38,15 @@ public class ItemDto {
 
     private List<CommentDto> comments;
 
+    private long requestId;
+
     @Transient
     public String getStringAvailable() {
-        return available;
+        return this.available;
+    }
+
+    public long getRequestId() {
+        return this.requestId;
     }
 
     public boolean getAvailable() {
