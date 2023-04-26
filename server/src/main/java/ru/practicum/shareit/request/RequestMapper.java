@@ -1,8 +1,8 @@
 package ru.practicum.shareit.request;
 
+import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.item.ItemMapper;
 import ru.practicum.shareit.item.dto.ItemDtoForRequest;
-import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.user.User;
 
 import java.util.List;
