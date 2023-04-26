@@ -10,16 +10,16 @@ public class PagesForSort {
             final int sizeInt = Integer.parseInt(size);
 
             if (fromInt < 0) {
-                throw new ValidationException(String.format("From cannot be less than 0!"));
+                throw new ValidationException("From cannot be less than 0!");
             }
             if (sizeInt < 1) {
-                throw new ValidationException(String.format("Size cannot be less than 1!"));
+                throw new ValidationException("Size cannot be less than 1!");
             }
             return true;
         } else if (from == null && size == null) {
             return false;
         } else {
-            throw new ValidationException(String.format("Please, enter from and size!"));
+            throw new ValidationException("Please, enter from and size!");
         }
     }
 }
