@@ -23,12 +23,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
     @Column(name = "username", nullable = false)
     private String name;
 
-    @NotBlank
-    @Email
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
