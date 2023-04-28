@@ -30,7 +30,7 @@ public class UserClient extends BaseClient {
     }
 
     public ResponseEntity<Object> updateUser(UserDto userDto, Long userId) {
-        return patch("/"+userId, userDto);
+        return patch("/" + userId, userDto);
     }
 
     public ResponseEntity<Object> deleteUser(Long userId) {

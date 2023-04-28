@@ -49,7 +49,7 @@ public class ItemClient extends BaseClient {
         return get(API_PREFIX_SEARCH + "?text={text}", userId, parameter);
     }
 
-    public ResponseEntity<Object> addNewComment( CommentDto commentDto, long userId, long itemId) {
+    public ResponseEntity<Object> addNewComment(CommentDto commentDto, long userId, long itemId) {
         return post(String.format("/%d/comment", itemId), userId, commentDto);
     }
 }
