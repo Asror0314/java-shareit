@@ -58,7 +58,7 @@ class BookingControllerTest {
     @SneakyThrows
     void getAllBooking() {
         Mockito
-                .when(service.getAllBooking(anyLong(), anyString(), anyString(), anyString()))
+                .when(service.getAllBookings(anyLong(), anyString(), anyInt(), anyInt()))
                 .thenReturn(Arrays.asList(responseDto));
 
         mvc.perform(get("/bookings")
@@ -79,7 +79,7 @@ class BookingControllerTest {
     @SneakyThrows
     void getAllBookingForOwner() {
         Mockito
-                .when(service.getAllBookingForOwner(anyLong(), anyString(), anyString(), anyString()))
+                .when(service.getAllBookingsForOwner(anyLong(), anyString(), anyInt(), anyInt()))
                 .thenReturn(Arrays.asList(responseDto));
 
         mvc.perform(get("/bookings/owner")
@@ -118,7 +118,7 @@ class BookingControllerTest {
     @SneakyThrows
     void addNewBooking() {
         Mockito
-                .when(service.addNewBooking(any(), anyLong()))
+                .when(service.addNewBook(any(), anyLong()))
                 .thenReturn(responseDto);
 
         mapper.registerModule(new JavaTimeModule());
@@ -136,7 +136,7 @@ class BookingControllerTest {
     @SneakyThrows
     void updateBookingStatus() {
         Mockito
-                .when(service.updateBookingStatus(anyLong(), anyBoolean(), anyLong()))
+                .when(service.updateBookStatus(anyLong(), anyBoolean(), anyLong()))
                 .thenReturn(responseDto);
 
         mvc.perform(patch("/bookings/{bookingId}", responseDto.getId())

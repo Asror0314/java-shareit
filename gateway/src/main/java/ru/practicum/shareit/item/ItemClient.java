@@ -10,7 +10,6 @@ import ru.practicum.shareit.client.BaseClient;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -45,12 +44,12 @@ public class ItemClient extends BaseClient {
     }
 
     public ResponseEntity<Object> searchItemByText(String text, long userId) {
-        final Map<String, Object> parameters = Map.of("text", text);
+        final Map<String, Object> parameter = Map.of("text", text);
 
-        return get(API_PREFIX_SEARCH + "?text={text}", userId, parameters);
+        return get(API_PREFIX_SEARCH + "?text={text}", userId, parameter);
     }
 
     public ResponseEntity<Object> addNewComment( CommentDto commentDto, long userId, long itemId) {
-        return null;
+        return post(String.format("/%d/comment", itemId), userId, commentDto);
     }
 }

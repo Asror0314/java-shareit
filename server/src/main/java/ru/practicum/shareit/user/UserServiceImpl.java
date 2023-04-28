@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
 
-import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 @Service

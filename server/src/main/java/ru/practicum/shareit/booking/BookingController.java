@@ -19,23 +19,23 @@ public class BookingController {
     private final BookingService bookingService;
 
     @GetMapping
-    public List<BookingDto> getAllBooking(
+    public List<BookingDto> getAllBookings(
             @RequestHeader(value = "X-Sharer-User-Id") long userId,
-            @RequestParam(defaultValue = "ALL") String state,
-            @RequestParam(required = false) String from,
-            @RequestParam(required = false) String size
+            @RequestParam(name = "state", defaultValue = "ALL") String stateParam,
+            @RequestParam(name = "from", defaultValue = "0") Integer from,
+            @RequestParam(name = "size", defaultValue = "10") Integer size
             ) {
-        return bookingService.getAllBooking(userId, state, from, size);
+        return bookingService.getAllBookings(userId, stateParam, from, size);
     }
 
     @GetMapping("/owner")
-    public List<BookingDto> getAllBookingForOwner(
+    public List<BookingDto> getAllBookingsForOwner(
             @RequestHeader(value = "X-Sharer-User-Id") long userId,
-            @RequestParam(defaultValue = "ALL") String state,
-            @RequestParam(required = false) String from,
-            @RequestParam(required = false) String size
+            @RequestParam(name = "state", defaultValue = "ALL") String stateParam,
+            @RequestParam(name = "from", defaultValue = "0") Integer from,
+            @RequestParam(name = "size", defaultValue = "10") Integer size
             ) {
-        return bookingService.getAllBookingForOwner(userId, state, from, size);
+        return bookingService.getAllBookingsForOwner(userId, stateParam, from, size);
     }
 
     @GetMapping("/{bookingId}")
@@ -47,19 +47,19 @@ public class BookingController {
     }
 
     @PostMapping
-    public BookingDto addNewBooking(
+    public BookingDto addNewBook(
             @Valid @RequestBody BookingRequestDto booking,
             @RequestHeader(value = "X-Sharer-User-Id") long userId
     ) {
-        return bookingService.addNewBooking(booking, userId);
+        return bookingService.addNewBook(booking, userId);
     }
 
     @PatchMapping("/{bookingId}")
-    public BookingDto updateBookingStatus(
+    public BookingDto updateBookStatus(
             @PathVariable long bookingId,
             @RequestParam(value = "approved") boolean status,
             @RequestHeader(value = "X-Sharer-User-Id") long userId
     ) {
-        return bookingService.updateBookingStatus(bookingId, status, userId);
+        return bookingService.updateBookStatus(bookingId, status, userId);
     }
 }

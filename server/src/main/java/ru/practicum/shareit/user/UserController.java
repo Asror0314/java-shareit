@@ -3,7 +3,6 @@ package ru.practicum.shareit.user;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -27,7 +26,7 @@ public class UserController {
     }
 
     @PostMapping
-    public User addUser(@Valid @RequestBody final User user) {
+    public User addUser(@RequestBody final User user) {
         return userService.addUser(user);
     }
 

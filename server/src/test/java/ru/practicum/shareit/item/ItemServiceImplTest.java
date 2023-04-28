@@ -284,7 +284,7 @@ class ItemServiceImplTest {
                 .thenReturn(Optional.of(user));
         Mockito.when(mockItemRepository.findById(anyLong()))
                 .thenReturn(Optional.of(item));
-        Mockito.when(mockBookingRepository.findBookingByBookerIdAndItemId(anyLong(), anyLong(), any(), any()))
+        Mockito.when(mockBookingRepository.findBookingByBookerIdAndItemId(anyLong(), anyLong(), anyString()))
                 .thenReturn(Optional.of(new Booking()));
         Mockito.when(mockCommentRepository.save(any()))
                 .thenReturn(comment);
@@ -327,7 +327,7 @@ class ItemServiceImplTest {
                 .thenReturn(Optional.of(user));
         Mockito.when(mockItemRepository.findById(anyLong()))
                 .thenReturn(Optional.of(item2));
-        Mockito.when(mockBookingRepository.findBookingByBookerIdAndItemId(anyLong(), anyLong(), any(), any()))
+        Mockito.when(mockBookingRepository.findBookingByBookerIdAndItemId(anyLong(), anyLong(), anyString()))
                 .thenThrow(new ValidationException(
                         String.format("User id = %d the user has not booked this item id = %d",
                                 wrongItemId, item2.getId())));

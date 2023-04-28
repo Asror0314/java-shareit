@@ -23,4 +23,6 @@ public class ItemDto {
     @NotNull
     private String available;
 
+    private long requestId;
+
 }

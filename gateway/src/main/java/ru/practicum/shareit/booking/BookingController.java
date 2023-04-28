@@ -22,26 +22,51 @@ public class BookingController {
 	private final BookingClient bookingClient;
 
 	@GetMapping
-	public ResponseEntity<Object> getBookings(@RequestHeader("X-Sharer-User-Id") long userId,
-			@RequestParam(name = "state", defaultValue = "all") String stateParam,
-			@PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
-			@Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
+	public ResponseEntity<Object> getAllBookings(
+				 @RequestHeader("X-Sharer-User-Id") long userId,
+				 @RequestParam(name = "state", defaultValue = "all") String stateParam,
+				 @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
+				 @Positive @RequestParam(name = "size", defaultValue = "10") Integer size
+	) {
 		BookingState state = BookingState.from(stateParam)
 				.orElseThrow(() -> new IllegalArgumentException("Unknown state: " + stateParam));
 		log.info("Get booking with state {}, userId={}, from={}, size={}", stateParam, userId, from, size);
-		return bookingClient.getBookings(userId, state, from, size);
+		return bookingClient.getAllBookings(userId, state, from, size);
+	}
+
+	@GetMapping("/owner")
+	public ResponseEntity<Object> getAllBookingsForOwner(
+			@RequestHeader(value = "X-Sharer-User-Id") long userId,
+			@RequestParam(name = "state", defaultValue = "ALL") String stateParam,
+			@PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
+			@Positive @RequestParam(name = "size", defaultValue = "10") Integer size
+	) {
+		BookingState state = BookingState.from(stateParam)
+				.orElseThrow(() -> new IllegalArgumentException("Unknown state: " + stateParam));
+		log.info("Get booking for owner with state {}, userId={}, from={}, size={}", stateParam, userId, from, size);
+		return bookingClient.getAllBookingsForOwner(userId, state, from, size);
 	}
 
 	@PostMapping
-	public ResponseEntity<Object> bookItem(@RequestHeader("X-Sharer-User-Id") long userId,
-			@RequestBody @Valid BookItemRequestDto requestDto) {
+	public ResponseEntity<Object> addNewBook(@RequestHeader("X-Sharer-User-Id") long userId,
+											 @RequestBody @Valid BookItemRequestDto requestDto) {
 		log.info("Creating booking {}, userId={}", requestDto, userId);
-		return bookingClient.bookItem(userId, requestDto);
+		return bookingClient.addNewBook(userId, requestDto);
 	}
 
 	@GetMapping("/{bookingId}")
-	public ResponseEntity<Object> getBooking(@RequestHeader("X-Sharer-User-Id") long userId,
-			@PathVariable Long bookingId) {
+	public ResponseEntity<Object> getBookingById(@RequestHeader("X-Sharer-User-Id") long userId,
+												 @PathVariable Long bookingId) {
 		log.info("Get booking {}, userId={}", bookingId, userId);
-		return bookingClient.getBooking(userId, bookingId);
-	}}
+		return bookingClient.getBookingById(userId, bookingId);
+	}
+
+	@PatchMapping("/{bookingId}")
+	public ResponseEntity<Object> updateBookStatus(
+			@PathVariable long bookingId,
+			@RequestParam(name = "approved") boolean status,
+			@RequestHeader(value = "X-Sharer-User-Id") long userId
+	) {
+		return bookingClient.updateBookStatus(bookingId, status, userId);
+	}
+}

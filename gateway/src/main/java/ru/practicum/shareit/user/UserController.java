@@ -1,6 +1,5 @@
 package ru.practicum.shareit.user;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +40,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    public void deleteUser(@PathVariable final Long userId) {
-        userClient.deleteUser(userId);
+    public ResponseEntity<Object> deleteUser(@PathVariable final Long userId) {
+        return userClient.deleteUser(userId);
     }
 }

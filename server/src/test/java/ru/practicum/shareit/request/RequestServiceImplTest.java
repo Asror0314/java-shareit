@@ -124,10 +124,10 @@ class RequestServiceImplTest {
                 .when(userRepository.findById(anyLong()))
                 .thenReturn(Optional.of(user));
         Mockito
-                .when(requestRepository.findAllForOtherUser(anyLong()))
+                .when(requestRepository.findAllForOtherUser(anyLong(), anyString(), anyString()))
                 .thenReturn(Arrays.asList(request));
 
-        final List<ItemRequestDto> ownRequests = service.getAllRequests(user.getId(), null, null);
+        final List<ItemRequestDto> ownRequests = service.getAllRequests(user.getId(), "0", "10");
 
         assertEquals(1, ownRequests.size());
         assertEquals(request.getId(), ownRequests.get(0).getId());
@@ -140,7 +140,7 @@ class RequestServiceImplTest {
                 .when(userRepository.findById(anyLong()))
                 .thenReturn(Optional.of(user));
         Mockito
-                .when(requestRepository.findAllForOtherUserWithPagination(anyLong(), anyString(), anyString()))
+                .when(requestRepository.findAllForOtherUser(anyLong(), anyString(), anyString()))
                 .thenReturn(Arrays.asList(request));
 
         final List<ItemRequestDto> ownRequests = service.getAllRequests(user.getId(), "0", "1");
@@ -148,30 +148,6 @@ class RequestServiceImplTest {
         assertEquals(1, ownRequests.size());
         assertEquals(request.getId(), ownRequests.get(0).getId());
         assertEquals(request.getDescription(), ownRequests.get(0).getDescription());
-    }
-
-    @Test
-    void getAllRequestsWithSizeLessThanOne() {
-        Mockito
-                .when(userRepository.findById(anyLong()))
-                .thenReturn(Optional.of(user));
-
-        final ValidationException exception = assertThrows(ValidationException.class,
-                                        () -> service.getAllRequests(user.getId(), "0", "0"));
-
-        assertEquals(String.format("Size cannot be less than 1!"), exception.getMessage());
-    }
-
-    @Test
-    void getAllRequestsWithFromLessThanZero() {
-        Mockito
-                .when(userRepository.findById(anyLong()))
-                .thenReturn(Optional.of(user));
-
-        final ValidationException exception = assertThrows(ValidationException.class,
-                                        () -> service.getAllRequests(user.getId(), "-2", "1"));
-
-        assertEquals(String.format("From cannot be less than 0!"), exception.getMessage());
     }
 
     @Test

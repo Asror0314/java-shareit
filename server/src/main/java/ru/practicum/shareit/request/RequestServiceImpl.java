@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.PagesForSort;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
@@ -50,17 +49,10 @@ public class RequestServiceImpl implements RequestService {
         userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException(String.format("User id = %d not found", userId)));
 
-        if (PagesForSort.createPage(from, size)) {
-            return requestRepository.findAllForOtherUserWithPagination(userId, from, size)
-                    .stream()
-                    .map(RequestMapper::map2RequestDto)
-                    .collect(Collectors.toList());
-        } else {
-            return requestRepository.findAllForOtherUser(userId)
-                    .stream()
-                    .map(RequestMapper::map2RequestDto)
-                    .collect(Collectors.toList());
-        }
+        return requestRepository.findAllForOtherUser(userId, from, size)
+                .stream()
+                .map(RequestMapper::map2RequestDto)
+                .collect(Collectors.toList());
     }
 
     @Override
