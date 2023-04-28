@@ -12,7 +12,7 @@
     <artifactId>shareit-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>Server</name>
+    <name>ShareIt Server</name>
 
     <dependencies>
         <dependency>
