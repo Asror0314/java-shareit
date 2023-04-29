@@ -83,7 +83,7 @@ class RequestControllerTest {
     @SneakyThrows
     void getAllRequests() {
         Mockito
-                .when(service.getAllRequests(Mockito.anyLong(), Mockito.anyString(), Mockito.anyString()))
+                .when(service.getAllRequests(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt()))
                 .thenReturn(Arrays.asList(responseDto));
 
         mvc.perform(get("/requests/all")

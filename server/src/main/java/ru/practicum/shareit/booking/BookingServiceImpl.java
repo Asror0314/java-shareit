@@ -127,7 +127,7 @@ public class BookingServiceImpl implements BookingService {
             }
             case "CURRENT":
                 return bookingRepository
-                    .findAllByBookerIdWithStatusCurrent(bookerId,from, size)
+                    .findAllByBookerIdWithStatusCurrent(bookerId, from, size)
                     .stream()
                     .map(BookingMapper::map2BookingDto)
                     .collect(Collectors.toList());

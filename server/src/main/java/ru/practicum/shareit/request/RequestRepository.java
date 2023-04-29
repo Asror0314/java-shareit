@@ -15,7 +15,7 @@ public interface RequestRepository extends JpaRepository<ItemRequest, Long> {
             "WHERE request.requester_id <> ?1 " +
             "ORDER BY request.created DESC LIMIT ?3 OFFSET ?2",
             nativeQuery = true)
-    List<ItemRequest> findAllForOtherUser(long requesterId, String from, String size);
+    List<ItemRequest> findAllForOtherUser(long requesterId, int from, int size);
 
 
 }

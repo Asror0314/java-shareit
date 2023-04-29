@@ -45,7 +45,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public List<ItemRequestDto> getAllRequests(long userId, String from, String size) {
+    public List<ItemRequestDto> getAllRequests(long userId, int from, int size) {
         userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException(String.format("User id = %d not found", userId)));
 

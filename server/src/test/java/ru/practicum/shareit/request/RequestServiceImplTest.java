@@ -123,10 +123,10 @@ class RequestServiceImplTest {
                 .when(userRepository.findById(anyLong()))
                 .thenReturn(Optional.of(user));
         Mockito
-                .when(requestRepository.findAllForOtherUser(anyLong(), anyString(), anyString()))
+                .when(requestRepository.findAllForOtherUser(anyLong(), anyInt(), anyInt()))
                 .thenReturn(Arrays.asList(request));
 
-        final List<ItemRequestDto> ownRequests = service.getAllRequests(user.getId(), "0", "10");
+        final List<ItemRequestDto> ownRequests = service.getAllRequests(user.getId(), 0, 10);
 
         assertEquals(1, ownRequests.size());
         assertEquals(request.getId(), ownRequests.get(0).getId());
@@ -139,10 +139,10 @@ class RequestServiceImplTest {
                 .when(userRepository.findById(anyLong()))
                 .thenReturn(Optional.of(user));
         Mockito
-                .when(requestRepository.findAllForOtherUser(anyLong(), anyString(), anyString()))
+                .when(requestRepository.findAllForOtherUser(anyLong(), anyInt(), anyInt()))
                 .thenReturn(Arrays.asList(request));
 
-        final List<ItemRequestDto> ownRequests = service.getAllRequests(user.getId(), "0", "1");
+        final List<ItemRequestDto> ownRequests = service.getAllRequests(user.getId(), 0, 1);
 
         assertEquals(1, ownRequests.size());
         assertEquals(request.getId(), ownRequests.get(0).getId());
