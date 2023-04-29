@@ -20,6 +20,7 @@ import ru.practicum.shareit.Status;
 
 import javax.validation.ValidationException;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -117,6 +118,7 @@ public class ItemServiceImpl implements ItemService {
                 .stream()
                 .filter(item -> item.getOwner().getId() == userId)
                 .map(item -> getItemById(item.getId(), userId))
+                .sorted(Comparator.comparing(ItemDto::getId))
                 .collect(Collectors.toList());
     }
 
