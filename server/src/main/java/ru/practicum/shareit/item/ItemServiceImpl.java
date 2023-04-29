@@ -117,6 +117,7 @@ public class ItemServiceImpl implements ItemService {
                 .stream()
                 .filter(item -> item.getOwner().getId() == userId)
                 .map(item -> getItemById(item.getId(), userId))
+                .sorted()
                 .collect(Collectors.toList());
     }
 
