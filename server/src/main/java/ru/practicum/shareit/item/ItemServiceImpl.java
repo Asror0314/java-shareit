@@ -132,6 +132,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public CommentDto addNewComment(
             CommentDto commentDto,
             long userId,
