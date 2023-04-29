@@ -14,7 +14,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query(value = "SELECT booking.* FROM booking " +
             "WHERE booking.booker_id = ?1 " +
             "AND booking.item_id = ?2 " +
-            "AND booking.status like ?3 " +
+            "AND booking.status = ?3 " +
             "AND booking.end_booking < now() " +
             "ORDER BY booking.end_booking DESC limit 1",
             nativeQuery = true)
