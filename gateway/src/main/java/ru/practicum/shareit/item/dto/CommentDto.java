@@ -12,13 +12,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class CommentDto {
 
-    private long id;
-
     @NotBlank
     private String text;
-
-    private String authorName;
-
-    private LocalDateTime created;
-
 }
