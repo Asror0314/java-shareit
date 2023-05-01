@@ -14,7 +14,7 @@ import java.util.List;
  */
 
 @Entity
-@Table(name = "request")
+@Table(name = "request", schema = "shareit")
 @Getter
 @Setter
 @NoArgsConstructor

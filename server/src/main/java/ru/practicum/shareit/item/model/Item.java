@@ -11,7 +11,7 @@ import javax.persistence.*;
  * TODO Sprint add-controllers.
  */
 @Entity
-@Table(name = "item")
+@Table(name = "item", schema = "shareit")
 @Getter
 @Setter
 @AllArgsConstructor

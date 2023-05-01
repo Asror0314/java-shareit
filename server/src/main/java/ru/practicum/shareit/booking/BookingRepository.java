@@ -11,88 +11,88 @@ import java.util.Optional;
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    @Query(value = "SELECT booking.* FROM booking " +
-            "WHERE booking.booker_id = ?1 " +
-            "AND booking.item_id = ?2 " +
-            "AND booking.status = ?3 " +
-            "AND booking.end_booking < now() " +
-            "ORDER BY booking.end_booking DESC limit 1",
+    @Query(value = "SELECT b.* FROM shareit.booking as b " +
+            "WHERE b.booker_id = ?1 " +
+            "AND b.item_id = ?2 " +
+            "AND b.status = ?3 " +
+            "AND b.end_booking < now() " +
+            "ORDER BY b.end_booking DESC limit 1",
             nativeQuery = true)
     Optional<Booking> findBookingByBookerIdAndItemId(long bookerId, long itemId, String status);
 
-    @Query(value = "SELECT booking.* FROM booking " +
-            "inner join item on booking.item_id = item.id " +
-            "WHERE item.owner_id = ?1 " +
-            "ORDER BY booking.end_booking DESC " +
+    @Query(value = "SELECT b.* FROM shareit.booking as b " +
+            "inner join shareit.item as i on b.item_id = i.id " +
+            "WHERE i.owner_id = ?1 " +
+            "ORDER BY b.end_booking DESC " +
             "limit ?3 OFFSET ?2", nativeQuery = true)
     List<Booking> findAllByOwnerId(long ownerId, int from, int size);
 
-    @Query(value = "SELECT booking.* FROM booking " +
-            "inner join item on booking.item_id = item.id " +
-            "WHERE item.owner_id = ?1 " +
-            "AND booking.status = ?2 " +
-            "ORDER BY booking.end_booking DESC " +
+    @Query(value = "SELECT b.* FROM shareit.booking as b " +
+            "inner join shareit.item as i on b.item_id = i.id " +
+            "WHERE i.owner_id = ?1 " +
+            "AND b.status = ?2 " +
+            "ORDER BY b.end_booking DESC " +
             "limit ?4 OFFSET ?3", nativeQuery = true)
     List<Booking> findAllByOwnerIdWithStatus(long ownerId, String status, int from, int size);
 
-    @Query(value = "SELECT booking.* FROM booking " +
-            "inner join item on booking.item_id = item.id " +
-            "WHERE item.owner_id = ?1 " +
-            "AND booking.start_booking < now() " +
-            "AND booking.end_booking > now() " +
-            "ORDER BY booking.end_booking DESC " +
+    @Query(value = "SELECT b.* FROM shareit.booking as b " +
+            "inner join shareit.item as i on b.item_id = i.id " +
+            "WHERE i.owner_id = ?1 " +
+            "AND b.start_booking < now() " +
+            "AND b.end_booking > now() " +
+            "ORDER BY b.end_booking DESC " +
             "limit ?3 OFFSET ?2", nativeQuery = true)
     List<Booking> findAllByOwnerIdWithStatusCurrent(long ownerId, int from, int size);
 
-    @Query(value = "SELECT booking.* FROM booking " +
-            "inner join item on booking.item_id = item.id " +
-            "WHERE item.owner_id = ?1 " +
-            "AND booking.start_booking > now() " +
-            "ORDER BY booking.end_booking DESC " +
+    @Query(value = "SELECT b.* FROM shareit.booking as b " +
+            "inner join shareit.item as i on b.item_id = i.id " +
+            "WHERE i.owner_id = ?1 " +
+            "AND b.start_booking > now() " +
+            "ORDER BY b.end_booking DESC " +
             "limit ?3 OFFSET ?2", nativeQuery = true)
     List<Booking> findAllByOwnerIdWithStatusFuture(long ownerId, int from, int size);
 
-    @Query(value = "SELECT booking.* FROM booking " +
-            "inner join item on booking.item_id = item.id " +
-            "WHERE item.owner_id = ?1 " +
-            "AND booking.end_booking < now() " +
-            "ORDER BY booking.end_booking DESC " +
+    @Query(value = "SELECT b.* FROM shareit.booking as b " +
+            "inner join shareit.item as i on b.item_id = i.id " +
+            "WHERE i.owner_id = ?1 " +
+            "AND b.end_booking < now() " +
+            "ORDER BY b.end_booking DESC " +
             "limit ?3 OFFSET ?2", nativeQuery = true)
     List<Booking> findAllByOwnerIdWithStatusPast(long ownerId, int from, int size);
 
-    @Query(value = "SELECT * FROM booking " +
-            "WHERE booking.booker_id = ?1 " +
-            "ORDER BY booking.end_booking DESC " +
+    @Query(value = "SELECT b.* FROM shareit.booking as b " +
+            "WHERE b.booker_id = ?1 " +
+            "ORDER BY b.end_booking DESC " +
             "limit ?3 OFFSET ?2", nativeQuery = true)
     List<Booking> findAllByBookerId(long bookerId, int from, int size);
 
-    @Query(value = "SELECT * FROM booking " +
-            "WHERE booking.booker_id = ?1 " +
-            "AND booking.status = ?2 " +
-            "ORDER BY booking.end_booking DESC " +
+    @Query(value = "SELECT b.* FROM shareit.booking as b " +
+            "WHERE b.booker_id = ?1 " +
+            "AND b.status = ?2 " +
+            "ORDER BY b.end_booking DESC " +
             "limit ?4 OFFSET ?3", nativeQuery = true)
     List<Booking> findAllByBookerIdWithStatus(long bookerId, String status, int from, int size);
 
-    @Query(value = "SELECT * FROM booking " +
-            "WHERE booking.booker_id = ?1 " +
-            "AND booking.start_booking < now() " +
-            "AND booking.end_booking > now() " +
-            "ORDER BY booking.end_booking DESC " +
+    @Query(value = "SELECT b.* FROM shareit.booking as b " +
+            "WHERE b.booker_id = ?1 " +
+            "AND b.start_booking < now() " +
+            "AND b.end_booking > now() " +
+            "ORDER BY b.end_booking DESC " +
             "limit ?3 OFFSET ?2", nativeQuery = true)
     List<Booking> findAllByBookerIdWithStatusCurrent(
             long bookerId, int from, int size);
 
-    @Query(value = "SELECT * FROM booking " +
-            "WHERE booking.booker_id = ?1 " +
-            "AND booking.start_booking > now() " +
-            "ORDER BY booking.end_booking DESC " +
+    @Query(value = "SELECT b.* FROM shareit.booking as b " +
+            "WHERE b.booker_id = ?1 " +
+            "AND b.start_booking > now() " +
+            "ORDER BY b.end_booking DESC " +
             "limit ?3 OFFSET ?2", nativeQuery = true)
     List<Booking> findAllByBookerIdWithStatusFuture(long bookerId, int from, int size);
 
-    @Query(value = "SELECT * FROM booking " +
-            "WHERE booking.booker_id = ?1 " +
-            "AND booking.end_booking < now() " +
-            "ORDER BY booking.end_booking DESC " +
+    @Query(value = "SELECT b.* FROM shareit.booking as b " +
+            "WHERE b.booker_id = ?1 " +
+            "AND b.end_booking < now() " +
+            "ORDER BY b.end_booking DESC " +
             "limit ?3 OFFSET ?2", nativeQuery = true)
     List<Booking> findAllByBookerIdWithStatusPast(long bookerId, int from, int size);
 
